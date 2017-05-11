@@ -18,8 +18,11 @@ A first ruleset for the Quickstart
   
   rule hello_world {
     select when echo hello
+    pre {
+      name = event:attr("name").klog("received name: ")
+    }
     send_directive("say") with
-      something = "Hello World"
+      something = "Hello " + name
   }
   
   rule hello_worldy {

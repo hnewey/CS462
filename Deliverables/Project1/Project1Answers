@@ -1,0 +1,12 @@
+1. Do you get the same result? Why or why not?
+>>>I do get the same result because both events are using the same ruleset even though they're coming from different channels.
+
+2. What happens? Why?
+>>>I get the error:
+{"error":"Key not found in database [channel,cj2jnok050000tndu30dj733h,pico_id]"} because the channel key was deleted so it couldn't be found.
+
+3. What do you observe? Why?
+>>>I get the following:
+{"directives":[]}
+This is because the rule we have defined in our ruleset specifies a directive when "echo hello" so it doesn't have any directives to return when we request "ecco hello". If we add a new ruleset and include "select when ecco hello", any specified directives will be returned.
+

@@ -1,0 +1,11 @@
+1. https://raw.githubusercontent.com/hnewey/CS462/master/hello_world.krl
+
+2. I was given the following error message when I deleted one of the closing braces:
+
+Error: Error: invalid syntax at index 36
+Unexpected {"type":"SYMBOL","src":"hello_world","loc":{"start":272,"end":283}}
+:19:8
+ 
+  rule hello_world {
+
+3. port 8080
