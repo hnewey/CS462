@@ -29,6 +29,15 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
     send_directive("say") with
       something = "Hello " + name
   }
+
+  rule hello_monkey {
+    select when echo monkey
+    pre {
+      name = event:attr("name").defaultsTo("Monkey").klog("received name: ")
+    }
+    send_directive("say") with
+      something = "Hello " + name
+  }
   
   rule hello_worldy {
     select when ecco hello
