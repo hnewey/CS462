@@ -17,7 +17,7 @@ A first ruleset for the Quickstart
 __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
                            { "name": "__testing" } ],
               "events": [ { "domain": "echo", "type": "hello",
-                            "attrs": [ "name" ] } ]
+                            "attrs": [ "name" ], "domain": "echo", "type": "monkey" } ]
             }
   }
   
