@@ -35,10 +35,10 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
   rule hello_monkey {
     select when echo monkey
     pre {
-      name = event:attr("name").defaultsTo("Monkey").klog("received name: ")
+      name = event:attr("name").klog("received name: ")
     }
     send_directive("say") with
-      something = "Hello " + name
+      something = "Hello " + name.defaultsTo("Monkey")
   }
   
   rule hello_worldy {
