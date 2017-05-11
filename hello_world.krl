@@ -19,14 +19,17 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
               "events": [ { "domain": "echo", "type": "hello",
                             "attrs": [ "name" ] },
 			  { "domain": "echo", "type": "monkey",
-			    "attrs": [ "name" ] } ]
+			    "attrs": [ "name" ] },
+			  { "domain": "echo", "type": "monkeyter",
+			    "attrs": [ "name" ] } 
+			]
             }
   }
   
   rule hello_world {
     select when echo hello
     pre {
-      name = event:attr("name").isnull() => "Monkey" | event:attr("name")
+      name = event:attr("name")
     }
     send_directive("say") with
       something = "Hello " + name
@@ -41,6 +44,15 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
       something = "Hello " + name
   }
   
+  rule hello_monkey_ter {
+    select when echo monkeyter
+    pre {
+      name = event:attr("name").match(re//) => "Monkey" | event:attr("name")
+    }
+    send_directive("say") with
+      something = "Hello " + name
+  }
+
   rule hello_worldy {
     select when ecco hello
     send_directive("no") with
