@@ -22,4 +22,10 @@ A first ruleset for the Quickstart
       something = "Hello World"
   }
   
+  rule hello_worldy {
+    select when ecco hello
+    send_directive("no") with
+      something = "I said yes!"
+  }
+  
 }
