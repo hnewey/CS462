@@ -38,7 +38,7 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
   rule hello_monkey {
     select when echo monkey
     pre {
-      name = event:attr("name").klog("received name: ").defaultsTo("Monkey")
+      name = event:attr("name").defaultsTo("Monkey");
     }
     send_directive("say") with
       something = "Hello " + name
@@ -47,7 +47,7 @@ __testing = { "queries": [ { "name": "hello", "args": [ "obj" ] },
   rule hello_monkey_ter {
     select when echo monkeyter
     pre {
-      name = event:attr("name").match(re//) => "Monkey" | event:attr("name")
+      name = event:attr("name").match(re//) => "Monkey" | event:attr("name");
     }
     send_directive("say") with
       something = "Hello " + name
