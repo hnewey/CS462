@@ -8,8 +8,8 @@ ruleset edmonds {
 	
 	global {
 		find_vin = function(vin) {
-			base_url = "https://api.edmunds.com/api/vehicle/v2/vins/#{vin}?fmt=json&api_key=#{api_key}
-			http:get(base_url)
+			base_url = "https://api.edmunds.com/api/vehicle/v2/vins/#{vin}?fmt=json&api_key=#{api_key}";
+			http:get(base_url);
 		}
 	}
 }
