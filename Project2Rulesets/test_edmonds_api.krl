@@ -1,6 +1,6 @@
 ruleset test_edmonds_api {
 	meta {
-		use module keys
+		use module edmonds_keys
 		use module edmonds
 				with api_key = keys:edmonds("api_key")
 	}
