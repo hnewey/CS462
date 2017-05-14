@@ -8,7 +8,7 @@ ruleset edmonds_api {
 	
 	global {
 		find_vin = function(vin) {
-			vin + api_key;
+			"https://api.edmunds.com/api/vehicle/v2/vins/#{vin}?fmt=json&api_key=#{api_key}";
 		}
 	}
 }
