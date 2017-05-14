@@ -1,0 +1,14 @@
+ruleset edmonds_api {
+	meta {
+		configure using api_key = ""
+		
+		provides 
+				find_vin
+	}
+	
+	global {
+		find_vin = function(vin) {
+			vin + api_key;
+		}
+	}
+}
