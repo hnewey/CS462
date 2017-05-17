@@ -1,0 +1,3 @@
+1. Since you can declare which keys to send to which modules, you don't have to worry about the code sending keys it shouldn't send. Therefore, in most cases, you could just use the same key module with a different key set for the new API. If the key module is getting too large or you're worried about all of your keys being stored in one all-knowing file, you could break them up into different key modules.
+
+2. The lesson explains this clearly. Since we were using GET requests, we weren't changing the state of our API so there was no need to put it in an action. Actions are generally used for requests that change the state so we can ensure that those aren't occuring in the prelude.

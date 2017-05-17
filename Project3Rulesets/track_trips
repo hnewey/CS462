@@ -1,0 +1,13 @@
+ruleset track_trips {
+	meta {
+	}
+
+	rule process_trips {
+		select when car new_trip
+    pre {
+      mileage = event:attr("mileage").defaultsTo("Monkey");
+    }
+    send_directive("trip") with
+				trip_length = mileage
+	}
+}
