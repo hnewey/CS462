@@ -24,8 +24,11 @@ ruleset track_trips {
 		pre {
 			mileage = event:attr("mileage");
 		}
-		if mileage > long_trip then
-			raise explicit event "found_long_trip"
+		if mileage < long_trip then
+			noop()
+		fired {
+    	raise explicit event "found_long_trip"
 				attributes { "attrs": event:attrs()}
+		}
 	}
 }
