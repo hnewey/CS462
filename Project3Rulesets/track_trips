@@ -39,9 +39,8 @@ ruleset track_trips {
 		select when explicit trip_processed
 		pre {
 			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("1GNFC13077J147883"));
-
 		}
 		send_directive("finding_vin") with
-			finding_vin = mpg
+			finding_vin = vehicleInfo
 	}
 }
