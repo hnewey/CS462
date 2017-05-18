@@ -18,7 +18,7 @@ ruleset track_trips {
 				trip_length = mileage
 		fired {
 			raise explicit event "trip_processed"
-				attributes { "attributes": event:attrs()}
+				attributes { "mileage": mileage, "vin": event:attr("vin")}
 		}
 	}
 
@@ -27,11 +27,8 @@ ruleset track_trips {
 		pre {
 			mileage = event:attr("mileage");
 		}
-		send_directive("attrs") with
-				attrs = event:attr("attributes")
 		if mileage < long_trip then
-	    send_directive("mileageIs") with
-				mileageVarIs = mileage
+                   noop()
 		fired {
     	raise explicit event "found_long_trip"
 				attributes { "attrs": event:attrs()}
@@ -41,9 +38,10 @@ ruleset track_trips {
 	rule trip_fuel_usage {
 		select when explicit trip_processed
 		pre {
-			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("JNKCV51E06M521497"));
+			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("1GNFC13077J147883"));
+
 		}
 		send_directive("finding_vin") with
-			finding_vin = true
+			finding_vin = mpg
 	}
 }
