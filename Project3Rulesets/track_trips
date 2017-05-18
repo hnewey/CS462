@@ -25,7 +25,7 @@ ruleset track_trips {
 			mileage = event:attr("mileage");
 		}
 		if mileage > long_trip
-			raise explicit event "found_long_trip"
-				attributes { "attrs": event:attrs()}
+			send_directive("found_long_trip") with
+				say = "entered if"
 	}
 }
