@@ -3,7 +3,7 @@ ruleset track_trips {
 	}
 
 	rule process_trips {
-		select when car new_trip mileage.as("num")
+		select when car new_trip mileage re#^[+]?([.]\d+|\d+([.]\d+)?)$#
     pre {
       mileage = event:attr("mileage").defaultsTo("0");
     }
