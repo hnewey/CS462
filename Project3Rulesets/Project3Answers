@@ -1,0 +1,5 @@
+1.
+
+2. I used an event expression with a regex looking for a positive number. One advantage of using a rule conditional is that my regex is much less readable and isn't as flexible. If we use a rule conditional, we can write our own functions to test a bunch of different things for that conditional. One advantage of my regex however, is the code is much cleaner and takes up less space which can help with understanding code flow.
+
+3. The output of my ruleset was just the output of process_trips. One directive was returned which makes sense since I only have one directive at this point in my code. It's strange because I would say that two rules ran but my debug information is telling me my second rule (find_long_trips) was called but never fired which doesn't make a lot of sense to me.

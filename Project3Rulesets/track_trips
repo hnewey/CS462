@@ -1,5 +1,8 @@
 ruleset track_trips {
 	meta {
+		use module edmonds_keys
+		use module edmonds_api
+				with api_key = keys:edmonds("api_key")
 	}
 
 	global {
@@ -25,10 +28,20 @@ ruleset track_trips {
 			mileage = event:attr("mileage");
 		}
 		if mileage < long_trip then
-			noop()
+	    send_directive("mileageIs") with
+				mileageVarIs = mileage
 		fired {
     	raise explicit event "found_long_trip"
 				attributes { "attrs": event:attrs()}
 		}
+	}
+
+	rule trip_fuel_usage {
+		select when explicit trip_processed
+		pre {
+			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("JNKCV51E06M521497"));
+		}
+		send_directive("finding_vin") with
+			finding_vin = true
 	}
 }
