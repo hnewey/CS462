@@ -2,6 +2,10 @@ ruleset track_trips {
 	meta {
 	}
 
+	global {
+		long_trip = 20;
+	}
+
 	rule process_trips {
 		select when car new_trip mileage re#^[+]?([.]\d+|\d+([.]\d+)?)$#
     pre {
@@ -16,6 +20,12 @@ ruleset track_trips {
 	}
 
 	rule find_long_trips {
-		
+		select when explicit trip_processed
+		pre {
+			mileage = event:attr("mileage");
+		}
+		if mileage > long_trip
+			raise explicit event "found_long_trip"
+				attributes { "attrs": event:attrs()}
 	}
 }
