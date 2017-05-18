@@ -9,13 +9,10 @@ ruleset track_trips {
     }
     send_directive("trip") with
 				trip_length = mileage
-
-		select when explicit trip_processed
-		pre {
-			attrs = event:attrs()
+		fired {
 		}
-		send_directive("explicit") with
-				trip_length = attrs
+			raise explicit event "trip_processed"
+				attributes { "attrs": event:attrs()}
 	}
 
 	rule find_long_trips {
