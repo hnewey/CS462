@@ -3,9 +3,9 @@ ruleset track_trips {
 	}
 
 	rule process_trips {
-		select when car new_trip
+		select when car new_trip mileage.as("num")
     pre {
-      mileage = event:attr("mileage").defaultsTo("Monkey");
+      mileage = event:attr("mileage").defaultsTo("0");
     }
     send_directive("trip") with
 				trip_length = mileage
