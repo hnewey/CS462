@@ -18,7 +18,7 @@ ruleset track_trips {
 				trip_length = mileage
 		fired {
 			raise explicit event "trip_processed"
-				attributes { "attrs": event:attrs()}
+				attributes { "attributes": event:attrs()}
 		}
 	}
 
@@ -27,6 +27,8 @@ ruleset track_trips {
 		pre {
 			mileage = event:attr("mileage");
 		}
+		send_directive("attrs") with
+				attrs = event:attr("attributes")
 		if mileage < long_trip then
 	    send_directive("mileageIs") with
 				mileageVarIs = mileage
