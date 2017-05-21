@@ -12,34 +12,35 @@ ruleset track_trips {
 	rule process_trips {
 		select when car new_trip mileage re#^[+]?([.]\d+|\d+([.]\d+)?)$#
     pre {
+      timestamp = time:now();
       mileage = event:attr("mileage").defaultsTo("0");
     }
     send_directive("trip") with
 				trip_length = mileage
 		fired {
 			raise explicit event "trip_processed"
-				attributes { "mileage": mileage, "attrs": event:attrs()}
+				attributes { "timestamp": timestamp, "mileage": mileage, "attrs": event:attrs()}
 		}
 	}
 
 	rule find_long_trips {
 		select when explicit trip_processed
 		pre {
-			timestamp = time:now();
+                        timestamp = time:now();
 			mileage = event:attr("mileage");
 		}
-		if mileage < long_trip then
+		if mileage > long_trip then
                    noop()
 		fired {
     	raise explicit event "found_long_trip"
-				attributes { "timestamp": timestamp, "attrs": event:attrs()}
+				attributes { "timestamp": timestamp, "mileage": mileage, "attrs": event:attr("attrs")}
 		}
 	}
 
 	rule trip_fuel_usage {
 		select when explicit trip_processed
 		pre {
-			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("1GNFC13077J147883"));
+			vehicleInfo = "deprecated";
 		}
 		send_directive("finding_vin") with
 			finding_vin = vehicleInfo
