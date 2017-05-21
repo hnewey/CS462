@@ -1,0 +1,59 @@
+ruleset trip_store {
+	meta {
+	}
+
+	global {
+		clear_trips = { "_0": { "trip": { "mileage": "", "timestamp": "" } } };
+		clear_long_trips = { "_0": { "long_trip": { "mileage": "", "timestamp": "" } } };
+		trips = function() {
+			value = ent:trips;
+		}
+	}
+
+	rule clear_trips {
+		select when car trip_reset
+		always {
+			ent:trips := clear_trips;
+			ent:long_trips := clear_long_trips;
+		}
+	}
+
+	rule collect_trips {
+		select when explicit trip_processed
+		pre {
+			attrs = event:attr("attrs");
+			passed_id = event:attr("id").klog("passed id: ");
+			passed_mileage = event:attr("mileage").klog("passed mileage: ");
+			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
+		}
+		send_directive("collect trip") with
+			ATTRS = attrs
+			id = passed_id
+			mileage = passed_mileage
+			timestamp = passed_timestamp
+		always {
+			ent:trips := ent:trips.defaultsTo(clear_trips, "initialization was needed");
+			ent:trips{[passed_id, "trip", "mileage"]} := passed_mileage;
+			ent:trips{[passed_id, "trip", "timestamp"]} := passed_timestamp;
+		}
+	}
+
+	rule collect_long_trips {
+		select when explicit found_long_trip
+		pre {
+			passed_id = event:attr("id").klog("passed id: ");
+			passed_mileage = event:attr("mileage").klog("passed mileage: ");
+			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
+		}
+		send_directive("long trip") with
+			id = passed_id
+			mileage = passed_mileage
+			timestamp = passed_timestamp
+		always {
+			ent:long_trips := ent:long_trips.defaultsTo(clear_trips, "initialization was needed");
+			ent:long_trips{[passed_id, "trip", "mileage"]} := passed_mileage;
+			ent:long_trips{[passed_id, "trip", "timestamp"]} := passed_timestamp;
+		}
+	}
+
+}
