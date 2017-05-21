@@ -22,7 +22,7 @@ ruleset trip_store {
 		select when explicit trip_processed
 		pre {
 			attrs = event:attr("attrs");
-			passed_id = event:attr("attrs"){"id"}.klog("passed id: ");
+			passed_id = event:attr("attrs"){"id"}.defaultsTo("_0").klog("passed id: ");
 			passed_mileage = event:attr("mileage").klog("passed mileage: ");
 			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
 		}
