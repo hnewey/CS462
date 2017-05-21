@@ -8,7 +8,14 @@ ruleset trip_store {
 		clear_trips = {  };
 		clear_long_trips = {  };
 		trips = function() {
-			value = ent:trips;
+			
+			value = ent:trips.values();
+		}
+		long_trips = function() {
+			value = ent:long_trips.values();
+		}
+		short_trips = function() {
+			
 		}
 	}
 
