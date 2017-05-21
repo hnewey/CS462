@@ -9,7 +9,6 @@ ruleset trip_store {
 		clear_long_trips = {  };
 		trips = function() {
 			keys = ent:trips.keys();
-			value = keys.map(function(x) {ent:trips.values([x, "timestamp"])});
 		}
 		long_trips = function() {
 			value = ent:long_trips.values();
