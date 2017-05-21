@@ -3,8 +3,8 @@ ruleset trip_store {
 	}
 
 	global {
-		clear_trips = { "_0": { "trip": { "mileage": "", "timestamp": "" } } };
-		clear_long_trips = { "_0": { "trip": { "mileage": "", "timestamp": "" } } };
+		clear_trips = {  };
+		clear_long_trips = {  };
 		trips = function() {
 			value = ent:trips;
 		}
