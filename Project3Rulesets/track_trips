@@ -25,13 +25,14 @@ ruleset track_trips {
 	rule find_long_trips {
 		select when explicit trip_processed
 		pre {
+			timestamp = time:now();
 			mileage = event:attr("mileage");
 		}
 		if mileage < long_trip then
                    noop()
 		fired {
     	raise explicit event "found_long_trip"
-				attributes { "attrs": event:attrs()}
+				attributes { "timestamp": timestamp, "attrs": event:attrs()}
 		}
 	}
 
