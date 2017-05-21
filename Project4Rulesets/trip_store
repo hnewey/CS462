@@ -42,7 +42,7 @@ ruleset trip_store {
 		select when explicit found_long_trip
 		pre {
 			passed_id = event:attr("id"){"id"}.defaultsTo("_0").klog("passed id: ");
-			passed_mileage = event:attr("mileage"){"mileage"}.defaultsTo("_0").klog("passed mileage: ");
+			passed_mileage = event:attr("mileage"){"mileage"}.defaultsTo("0").klog("passed mileage: ");
 			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
 		}
 		send_directive("long trip") with
