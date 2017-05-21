@@ -38,7 +38,7 @@ ruleset track_trips {
 	rule trip_fuel_usage {
 		select when explicit trip_processed
 		pre {
-			vehicleInfo = "deprecated"
+			vehicleInfo = edmonds_api:find_vin(event:attr("vin").defaultsTo("1GNFC13077J147883"));
 		}
 		send_directive("finding_vin") with
 			finding_vin = vehicleInfo
