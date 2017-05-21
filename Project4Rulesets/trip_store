@@ -1,7 +1,7 @@
 ruleset trip_store {
 	meta {
-		provides trips
-		shares trips
+		provides trips, long_trips, short_trips
+		shares trips, long_trips, short_trips
 	}
 
 	global {
@@ -9,12 +9,16 @@ ruleset trip_store {
 		clear_long_trips = {  };
 		trips = function() {
 			keys = ent:trips.keys();
+			value = keys.map(function(x) {ent:trips.values([x])});
 		}
 		long_trips = function() {
-			value = ent:long_trips.values();
+      keys = ent:long_trips.keys();
+			value = keys.map(function(x) {ent:long_trips.values([x])});
 		}
 		short_trips = function() {
-			
+			at = trips;
+			lt = long_trips;
+      value = at.filter(function(x) {lt.any(function(y) {x == y})});
 		}
 	}
 
@@ -65,3 +69,4 @@ ruleset trip_store {
 	}
 
 }
+
