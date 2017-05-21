@@ -8,7 +8,8 @@ ruleset trip_store {
 		clear_trips = {  };
 		clear_long_trips = {  };
 		trips = function() {
-			value = ent:trips.values(["timestamp"]) + "***" + ent:trips.values(["mileage"]);
+			keys = ent:trips.keys();
+			value = keys.map(function(x) {ent:trips.values([x, "timestamp"])});
 		}
 		long_trips = function() {
 			value = ent:long_trips.values();
