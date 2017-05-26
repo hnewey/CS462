@@ -1,0 +1,112 @@
+<!doctype html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>Trips</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script type="text/javascript">
+    function resetTrips() {
+        var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/trip_reset";
+	httpGet(url, null);
+	createTables();
+    }
+
+    function addTrip(input) {
+	var id = document.getElementById("tripsTable").rows.length;
+        var mileage = document.getElementById("mileageID").value;
+        var vin = document.getElementById("vinID").value;
+	var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/new_trip?mileage=" + mileage + "&id=_" + id + "&vin=" + vin;
+        httpPost(url, null);
+        createTables();
+    }
+
+    function httpPost(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("POST", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+    function httpGet(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+    function createTables() {
+	var url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/trips";
+	var table = document.getElementById("tripsTable");
+	createTableHeader(table);
+	httpGet(url, function(response) {
+	    var json = JSON.parse(response);
+	    var keys = [];
+	    for (var k in json) keys.push(k);
+	    alert ("total " + keys.length + " keys: " + keys);
+
+	    var row = table.insertRow(1);
+	    var cell1 = row.insertCell(0);
+	    var cell2 = row.insertCell(1);
+	    cell1.innerHTML = JSON.parse(response);
+	    cell2.innerHTML = directives;
+	});
+
+alert("table updated");
+
+	url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/long_trips";
+	table = document.getElementById("longTripsTable");
+	createTableHeader(table);
+    }
+
+    function createTableHeader(table) {
+        var header = table.createTHead();
+        var row = header.insertRow(0);
+        var cell = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+	var cell3 = row.insertCell(2);
+        cell.innerHTML = "<b>Trip No.</b>";
+        cell2.innerHTML = "<b>Mileage</b>";
+	cell3.innerHTML = "<b>VIN</b>";
+    }
+
+</script>
+<style>
+    iframe {
+	display: none;
+    }
+</style>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="page-header">
+            <h1>Trips</h1>
+        </div>
+        <div class="sub-area">
+            <h3>New Trip</h3>
+        </div>
+        <form target="frame" onsubmit="addTrip(this)">
+            <input type="text" name="mileage" id="mileageID" placeholder="mileage" value="3">
+            <input type="text" name="vin" id="vinID" placeholder="VIN" value="blank">
+            <button type="submit">Add Trip</button>
+        </form>
+	<button onclick="resetTrips()">Reset Trips</button>
+
+	<br><h3>All Trips:</h3>
+	<table id="tripsTable">
+	</table>
+
+	<br><h3>Long Trips:</h3>
+	<table id="longTripsTable">
+	</table>
+    </div>
+    <iframe name="frame"></iframe>
+</div>
+</body>
+</html>

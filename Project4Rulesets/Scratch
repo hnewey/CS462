@@ -1,0 +1,15 @@
+		clear_trips = { "_0": { "trip": { "mileage": "", "timestamp": "" } } };
+		clear_long_trips = { "_0": { "trip": { "mileage": "", "timestamp": "" } } };
+
+
+
+eci: cj2tmxid50001zqdutlpe3l5y
+/sky/cloud/<eci>/<rid>/<name>?name0=value0&...&namen=valuen
+http:localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/cj2tmxid30000zqdu0z6qcphl/trips
+
+
+
+value = ent:trips.values(["timestamp"]) + "***" + ent:trips.values(["mileage"]);
+
+
+value = keys.map(function(x) {ent:trips.values([x, "timestamp"])});

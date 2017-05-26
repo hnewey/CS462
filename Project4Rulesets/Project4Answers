@@ -1,0 +1,7 @@
+1. Events that trigger this rule change the state of the API which can then be queried to get their value.
+
+2. I didn't quite get it working but I think I was really close. The idea was to apply a filter to the array returned by the trips function that would look at each value in the array and see if any value in the array returned by the long_trips function matched it. If it did, that value would be filtered.
+
+3. From what I can tell...nothing. My program still runs fine without it
+
+4. I get an error saying "Not shared"
