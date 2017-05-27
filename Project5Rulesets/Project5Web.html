@@ -43,6 +43,7 @@
     }
 
     function createTables() {
+	/*clearTables();*/
 	var url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/trips";
 	var table = document.getElementById("tripsTable");
 	createTableHeader(table);
@@ -52,18 +53,44 @@
 	    for (var k in json) keys.push(k);
 	    alert ("total " + keys.length + " keys: " + keys);
 
-	    var row = table.insertRow(1);
-	    var cell1 = row.insertCell(0);
-	    var cell2 = row.insertCell(1);
-	    cell1.innerHTML = JSON.parse(response);
-	    cell2.innerHTML = directives;
+	    for (var id in keys) {
+		var mileage = json[id]["0"]["mileage"];
+		var vin = json[id]["0"]["vin"];
+
+		var row = table.insertRow(1);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		cell1.innerHTML = id;
+		cell2.innerHTML = mileage;
+		cell3.innerHTML = vin;
+	    }
+	    createLongTable();
 	});
+    }
 
-alert("table updated");
-
+    function createLongTable() {
 	url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/long_trips";
 	table = document.getElementById("longTripsTable");
 	createTableHeader(table);
+	httpGet(url, function(response) {
+	    var json = JSON.parse(response);
+	    var keys = [];
+	    for (var k in json) keys.push(k);
+	    alert ("total " + keys.length + " keys: " + keys);
+	    for (var id in keys) {
+		var mileage = json[id]["0"]["mileage"];
+		var vin = json[id]["0"]["vin"];
+
+		var row = table.insertRow(1);
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		cell1.innerHTML = id;
+		cell2.innerHTML = mileage;
+		cell3.innerHTML = vin;
+	    }
+	});
     }
 
     function createTableHeader(table) {
@@ -75,6 +102,13 @@ alert("table updated");
         cell.innerHTML = "<b>Trip No.</b>";
         cell2.innerHTML = "<b>Mileage</b>";
 	cell3.innerHTML = "<b>VIN</b>";
+    }
+
+    function clearTables() {
+	var table = document.getElementById("tripsTable");
+	var long_table = document.getElementById("longTripsTable");
+	for (var i in table.rows) table.deleteRow(0);
+	for (var j in long_table.rows) long_table.deleteRow(0);
     }
 
 </script>

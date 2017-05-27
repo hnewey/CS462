@@ -1,0 +1,27 @@
+ruleset vehicle_profile {
+	meta {
+		provides car_vin, car_longTrip
+		shares car_vin, car_longTrip
+	}
+	
+	global {
+		car_vin = function() {
+			return = ent:vin.defaultsTo("No vin given");
+		}
+		car_longTrip = function() {
+			return = ent:longTrip;
+		}
+	}
+
+	rule update_profile {
+		select when car profile_updated
+		pre {
+			vin = event:attr("vin");
+			longTrip = event:attr("longTrip");
+		}
+		always {
+			ent:vin := vin.defaultsTo("No vin given");
+			ent:longTrip := longTrip.defaultsTo("20");
+		}
+	}
+}
