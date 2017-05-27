@@ -10,14 +10,14 @@
     function resetTrips() {
         var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/trip_reset";
 	httpGet(url, null);
-	createTables();
+	clearTable(document.getElementById("tripsTable"));
+	clearTable(document.getElementById("longTripsTable"));
     }
 
     function addTrip(input) {
 	var id = document.getElementById("tripsTable").rows.length;
         var mileage = document.getElementById("mileageID").value;
-        var vin = document.getElementById("vinID").value;
-	var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/new_trip?mileage=" + mileage + "&id=_" + id + "&vin=" + vin;
+	var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/new_trip?mileage=" + mileage + "&id=_" + id;
         httpPost(url, null);
         createTables();
     }
@@ -45,13 +45,14 @@
     function createTables() {
 	/*clearTables();*/
 	var url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/trips";
-	var table = document.getElementById("tripsTable");
+
+	var table = document.getElementById("tripsTable"); 
+	clearTable(table);
 	createTableHeader(table);
 	httpGet(url, function(response) {
 	    var json = JSON.parse(response);
 	    var keys = [];
 	    for (var k in json) keys.push(k);
-	    alert ("total " + keys.length + " keys: " + keys);
 
 	    for (var id in keys) {
 		var mileage = json[id]["0"]["mileage"];
@@ -65,6 +66,8 @@
 		cell2.innerHTML = mileage;
 		cell3.innerHTML = vin;
 	    }
+	    /*var container = document.getElementById("tripsDiv");
+	    container.innerHTML = table;*/
 	    createLongTable();
 	});
     }
@@ -72,12 +75,13 @@
     function createLongTable() {
 	url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/long_trips";
 	table = document.getElementById("longTripsTable");
+	clearTable(table);
 	createTableHeader(table);
 	httpGet(url, function(response) {
 	    var json = JSON.parse(response);
 	    var keys = [];
 	    for (var k in json) keys.push(k);
-	    alert ("total " + keys.length + " keys: " + keys);
+
 	    for (var id in keys) {
 		var mileage = json[id]["0"]["mileage"];
 		var vin = json[id]["0"]["vin"];
@@ -104,17 +108,26 @@
 	cell3.innerHTML = "<b>VIN</b>";
     }
 
-    function clearTables() {
-	var table = document.getElementById("tripsTable");
-	var long_table = document.getElementById("longTripsTable");
-	for (var i in table.rows) table.deleteRow(0);
-	for (var j in long_table.rows) long_table.deleteRow(0);
+    function clearTable(table) {
+	var rows = table.rows;
+	if (rows.length > 0) {
+	    for (var r=rows.length-1; r>=0; r--) {
+	        table.deleteRow(r);
+	    }
+	}
     }
+
+    window.onload = function() {
+	createTables();
+    };
 
 </script>
 <style>
     iframe {
 	display: none;
+    }
+    td {
+	width: 90px;
     }
 </style>
 <div class="row">
@@ -127,18 +140,23 @@
         </div>
         <form target="frame" onsubmit="addTrip(this)">
             <input type="text" name="mileage" id="mileageID" placeholder="mileage" value="3">
-            <input type="text" name="vin" id="vinID" placeholder="VIN" value="blank">
             <button type="submit">Add Trip</button>
         </form>
 	<button onclick="resetTrips()">Reset Trips</button>
 
+	<div id="tripsDiv">
 	<br><h3>All Trips:</h3>
 	<table id="tripsTable">
+	    <tbody id="tripsBody"></tbody>
 	</table>
+	</div>
 
+	<div id="longDiv">
 	<br><h3>Long Trips:</h3>
 	<table id="longTripsTable">
+	    <tbody id="longBody"></tbody>
 	</table>
+	</div>
     </div>
     <iframe name="frame"></iframe>
 </div>

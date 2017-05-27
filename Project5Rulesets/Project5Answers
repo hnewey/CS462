@@ -1,0 +1,7 @@
+1. In my process_trips rule, I didn't do a good job passing all attributes with event:attrs(). Instead, I passed each attribute one by one which made me have to update a lot of places to handle the new VIN functionality.
+
+2. The only way to interact with that ruleset is through the functions it provides or through the event handling it has to update the long trip threshold and VIN. Therefore, the only way to change the state is through an event and the only processes that can be accessed are the functions it has provided.
+
+3. They use it as a module, accessing the functions it has provided. They can't access the data directly.
+
+4. Other rulesets could fire off their own events that are caught by the update_profile rule.

@@ -12,13 +12,13 @@ ruleset trip_store {
 			value = keys.map(function(x) {ent:trips.values([x])});
 		}
 		long_trips = function() {
-      keys = ent:long_trips.keys();
+                        keys = ent:long_trips.keys();
 			value = keys.map(function(x) {ent:long_trips.values([x])});
 		}
 		short_trips = function() {
 			at = trips;
-			lt = long_trips;
-      value = at.filter(function(x) {lt.any(function(y) {x == y})});
+                        lt = long_trips;
+                        value = at.filter(function(x) {lt.any(function(y) {x == y})});
 		}
 	}
 
@@ -37,16 +37,19 @@ ruleset trip_store {
 			passed_id = event:attr("attrs"){"id"}.defaultsTo("_0").klog("passed id: ");
 			passed_mileage = event:attr("mileage").klog("passed mileage: ");
 			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
+			passed_vin = event:attr("vin").klog("passed vin: ");
 		}
 		send_directive("collect trip") with
 			ATTRS = attrs
 			id = passed_id
 			mileage = passed_mileage
 			timestamp = passed_timestamp
+                        vin = passed_vin
 		always {
 			ent:trips := ent:trips.defaultsTo(clear_trips, "initialization was needed");
 			ent:trips{[passed_id, "trip", "mileage"]} := passed_mileage;
 			ent:trips{[passed_id, "trip", "timestamp"]} := passed_timestamp;
+			ent:trips{[passed_id, "trip", "vin"]} := passed_vin;
 		}
 	}
 
@@ -56,15 +59,18 @@ ruleset trip_store {
 			passed_id = event:attr("attrs"){"id"}.defaultsTo("_0").klog("passed id: ");
 			passed_mileage = event:attr("attrs"){"mileage"}.defaultsTo("0").klog("passed mileage: ");
 			passed_timestamp = event:attr("timestamp").klog("passed timestamp: ");
+			passed_vin = event:attr("vin").klog("passed vin: ");
 		}
 		send_directive("long trip") with
 			id = passed_id
 			mileage = passed_mileage
 			timestamp = passed_timestamp
+			vin = passed_vin
 		always {
 			ent:long_trips := ent:long_trips.defaultsTo(clear_trips, "initialization was needed");
 			ent:long_trips{[passed_id, "trip", "mileage"]} := passed_mileage;
 			ent:long_trips{[passed_id, "trip", "timestamp"]} := passed_timestamp;
+			ent:long_trips{[passed_id, "trip", "vin"]} := passed_vin;
 		}
 	}
 

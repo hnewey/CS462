@@ -3,3 +3,18 @@ http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/new_trip?mile
 http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/trips
 
 http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/trip_store/long_trips
+
+
+
+http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/profile_updated?vin=xxxxx&longTrip=40
+
+http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/vehicle_profile/car_vin
+
+http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/vehicle_profile/car_longTrip
+
+
+
+
+
+
+	    <tr><th>Trip No:</th><th>Mileage</th><th>VIN</th></tr>

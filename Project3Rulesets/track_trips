@@ -1,5 +1,6 @@
 ruleset track_trips {
 	meta {
+                use module vehicle_profile
 		use module edmonds_keys
 		use module edmonds_api
 				with api_key = keys:edmonds("api_key")
@@ -12,6 +13,7 @@ ruleset track_trips {
 	rule process_trips {
 		select when car new_trip mileage re#^[+]?([.]\d+|\d+([.]\d+)?)$#
     pre {
+      vin = vehicle_profile:car_vin().klog("*******VIN is: ");
       timestamp = time:now();
       mileage = event:attr("mileage").defaultsTo("0");
     }
@@ -19,7 +21,7 @@ ruleset track_trips {
 				trip_length = mileage
 		fired {
 			raise explicit event "trip_processed"
-				attributes { "timestamp": timestamp, "mileage": mileage, "attrs": event:attrs()}
+				attributes { "vin": vin, "timestamp": timestamp, "mileage": mileage, "attrs": event:attrs()}
 		}
 	}
 
@@ -28,12 +30,13 @@ ruleset track_trips {
 		pre {
                         timestamp = time:now();
 			mileage = event:attr("mileage");
+                        vin = event:attr("vin");
 		}
 		if mileage > long_trip then
                    noop()
 		fired {
     	raise explicit event "found_long_trip"
-				attributes { "timestamp": timestamp, "mileage": mileage, "attrs": event:attr("attrs")}
+				attributes { "vin": vin, "timestamp": timestamp, "mileage": mileage, "attrs": event:attr("attrs")}
 		}
 	}
 
