@@ -9,7 +9,7 @@ ruleset vehicle_profile {
 			return = ent:vin.defaultsTo("No vin given");
 		}
 		car_longTrip = function() {
-			return = ent:longTrip;
+			return = ent:longTrip.defaultsTo("20");
 		}
 	}
 
