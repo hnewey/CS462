@@ -1,0 +1,94 @@
+<!doctype html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>Trips</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script type="text/javascript">
+
+    function updateProfile(input) {
+        var longTrip = document.getElementById("longTripID").value;
+        var vin = document.getElementById("vinID").value;
+	var url = "http://localhost:8080/sky/event/cj2tmxid50001zqdutlpe3l5y/1556/car/profile_updated?vin=" + vin + "&longTrip=" + longTrip;
+        httpPost(url, null);
+        refreshAttributes();
+    }
+
+    function httpPost(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("POST", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+    function httpGet(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+    function refreshAttributes() {
+	refreshVin();
+	refreshLongTrip();
+    }
+
+    function refreshVin() {
+	url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/vehicle_profile/car_vin";
+	vinText = document.getElementById("vinText");
+	httpGet(url, function(response) {
+	    vinText.innerHTML = "<b>VIN: </b>" + response;
+	});	
+    }
+
+    function refreshLongTrip() {
+	url = "http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/vehicle_profile/car_longTrip";
+	longTripText = document.getElementById("longTripText");
+	httpGet(url, function(response) {
+	    longTripText.innerHTML = "<b>Long Trip Threshold: </b>" + response;
+	});
+	
+    }
+
+    window.onload = function() {
+	refreshAttributes();
+    };
+
+
+</script>
+<style>
+    iframe {
+	display: none;
+    }
+</style>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="page-header">
+            <h1>Car Profile</h1>
+	    <h3>Attributes:</h3>
+	    <p id="vinText"></p>
+	    <p id="longTripText"></p>
+        </div>
+        <div class="sub-area">
+            <br><h3>Change Attributes:</h3>
+        </div>
+        <form target="frame" onsubmit="updateProfile(this)">
+            <input type="text" name="vin" id="vinID" placeholder="VIN" value="">
+            <input type="text" name="longTrip" id="longTripID" placeholder="long trip threshold" value="">
+            <button type="submit">Update</button>
+        </form>
+
+
+    </div>
+    <iframe name="frame"></iframe>
+</div>
+</body>
+</html>
