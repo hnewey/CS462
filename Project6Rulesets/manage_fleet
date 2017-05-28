@@ -79,7 +79,7 @@ ruleset manage_fleet {
 					"attrs": { "rid": "vehicle_profile", "vehicle_vin": vehicle_vin } } )
 		fired {
 			ent:vehicles := ent:vehicles.defaultsTo({});
-			ent:vehicles{[vehicle_vin]} := the_vehicle
+			ent:vehicles{[vehicle_vin]} := the_vehicle;
 			raise pico event "child_finished"
 				attributes { "vin": vehicle_vin }
 		}
