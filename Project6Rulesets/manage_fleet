@@ -10,6 +10,9 @@ ruleset manage_fleet {
 		nameFromVin = function(vehicle_vin) {
 			"Vehicle " + vehicle_vin + " Pico"
 		}
+		childFromVin = function(vehicle_vin) {
+			ent:vehicles{[vehicle_vin]}
+		}
 		showChildren = function() {
 			wrangler:children()
 		}
@@ -84,6 +87,24 @@ ruleset manage_fleet {
 		fired {
 			ent:vehicles := ent:vehicles.defaultsTo({});
 			ent:vehicles{[vehicle_vin]} := the_vehicle;
+		}
+	}
+
+	rule remove_vehicle {
+		select when car unneeded_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin
+			child_to_delete = childFromVin(vehicle_vin)
+		}
+		if exists then
+			send_directive("vehicle removed")
+				with vehicle_vin = vehicle_vin
+						 child_to_delete = child_to_delete
+		fired {
+			raise pico event "delete_child_request"
+				attributes child_to_delete;
+			ent:vehicles{[vehicle_vin]} := null
 		}
 	}
 	

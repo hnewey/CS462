@@ -19,4 +19,14 @@ http://localhost:8080/sky/event/cj37x824t0001o6dujgbohsav/2000/car/new_vehicle?v
 http://localhost:8080/sky/cloud/cj37x824t0001o6dujgbohsav/manage_fleet/vehicles
 
 
-	    <tr><th>Trip No:</th><th>Mileage</th><th>VIN</th></tr>
+	rule pico_child_created {
+		select when pico ruleset_added
+		pre {
+			vehicle_vin = event:attr("vin")
+		}
+		fired {
+			raise car event "profile_updated"
+				attributes { "vin": vehicle_vin, "longTrip": tripThreshold }
+		}
+	}
+
