@@ -100,6 +100,10 @@ ruleset manage_fleet {
 			exists = ent:vehicles >< vehicle_vin
 			child_to_delete = childFromVin(vehicle_vin)
 		}
+		send_directive("values") with
+			vehicle_vin = vehicle_vin
+			child_to_delete = child_to_delete
+			exists = exists
 		if exists then
 			send_directive("vehicle removed")
 				with vehicle_vin = vehicle_vin
