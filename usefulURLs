@@ -14,7 +14,9 @@ http://localhost:8080/sky/cloud/cj2tmxid50001zqdutlpe3l5y/vehicle_profile/car_lo
 
 
 
+http://localhost:8080/sky/event/cj37x824t0001o6dujgbohsav/2000/car/new_vehicle?vin=xxxxx
 
+http://localhost:8080/sky/cloud/cj37x824t0001o6dujgbohsav/manage_fleet/vehicles
 
 
 	    <tr><th>Trip No:</th><th>Mileage</th><th>VIN</th></tr>

@@ -1,0 +1,76 @@
+ruleset manage_fleet {
+
+	meta {
+		provides vehicles
+		shares vehicles
+		use module io.picolabs.pico alias wrangler
+	}
+
+	global {
+		nameFromVin = function(vehicle_vin) {
+			"Vehicle " + vehicle_vin + " Pico"
+		}
+		showChildren = function() {
+			wrangler:children()
+		}
+		vehicles = function() {
+			keys = ent:vehicles.keys();
+			value = keys.map(function(x) {ent:vehicles.values([x])});
+		}
+	}
+
+	rule clear_fleet {
+		select when fleet clear
+		always {
+			ent:vehicles := {}
+		}
+	}
+
+	rule car_already_exists {
+		select when car new_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin
+		}
+		if exists then
+			send_directive("vehicle exists")
+				with vehicle_vin = vehicle_vin
+	//create new pico, install trip_store, track_trips, and vehicle_profile.
+	//store new car pico's ECI and vehicle's name as an entity variable
+	//called vehicles that makes the name to the ECI
+	}
+
+	rule car_needed {
+		select when car new_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin			
+		}
+		if not exists then
+			noop()
+		fired {
+			raise pico event "new_child_request"
+				attributes { "dname": nameFromVin(vehicle_vin),
+										 "color": "#e0873e",
+										 "vehicle_vin": vehicle_vin }
+		}
+	}
+
+	rule pico_child_initialized {
+		select when pico child_initialized
+		pre {
+			the_vehicle = event:attr("new_child")
+			vehicle_vin = event:attr("rs_attrs"){"vehicle_vin"}
+		}
+		if vehicle_vin.klog("FOUND VEHICLE_VIN ")
+		then
+			event:send(
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "trip_store", "vehicle_vin": vehicle_vin } } )
+		fired {
+			ent:vehicles := ent:vehicles.defaultsTo({});
+			ent:vehicles{[vehicle_vin]} := the_vehicle
+		}
+	}
+}
