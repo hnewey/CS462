@@ -77,16 +77,18 @@ ruleset manage_fleet {
 				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
 				  "domain": "pico", "type": "new_ruleset",
 					"attrs": { "rid": "vehicle_profile", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "update_car_profile",
+					"domain": "car", "type": "profile_updated",
+					"attrs": { "vin": vehicle_vin, "longTrip": tripThreshold } } )
 		fired {
 			ent:vehicles := ent:vehicles.defaultsTo({});
 			ent:vehicles{[vehicle_vin]} := the_vehicle;
-			raise pico event "child_finished"
-				attributes { "vin": vehicle_vin }
 		}
 	}
 	
 	rule pico_child_created {
-		select when pico child_finished
+		select when pico ruleset_added
 		pre {
 			vehicle_vin = event:attr("vin")
 		}
