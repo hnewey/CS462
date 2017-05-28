@@ -42,9 +42,6 @@ ruleset manage_fleet {
 		if exists then
 			send_directive("vehicle exists")
 				with vehicle_vin = vehicle_vin
-	//create new pico, install trip_store, track_trips, and vehicle_profile.
-	//store new car pico's ECI and vehicle's name as an entity variable
-	//called vehicles that makes the name to the ECI
 	}
 
 	rule car_needed {
@@ -100,10 +97,10 @@ ruleset manage_fleet {
 			exists = ent:vehicles >< vehicle_vin
 			child_to_delete = childFromVin(vehicle_vin)
 		}
-		send_directive("values") with
-			vehicle_vin = vehicle_vin
-			child_to_delete = child_to_delete
-			exists = exists
+		if exists then
+			send_directive("vehicle removed")
+				with vehicle_vin = vehicle_vin
+						 child_to_delete = child_to_delete
 		fired {
 			raise pico event "delete_child_request"
 				attributes child_to_delete;

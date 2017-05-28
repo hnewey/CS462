@@ -1,0 +1,7 @@
+1. I have a rule that selects on "pico child_initialized" that sends a "pico new_ruleset" event to wrangler which installs the rule_set specified in the attributes.
+
+2. As stated in the lesson: "When an event triggers a rule, that rule will run to completion, and no other event for the pico will be considered until it has finished." Therefore, I sent a series of events to the pico once it was created to install the appropriate rulesets there. Once those were installed, I sent another event to notify of the profile change. Since those events were guaranteed to run first, I knew the pico had been created and the correct rulesets were in place.
+
+3. I don't have any experience doing command line scripting so I just did it with javascript.
+
+4. A function could be written that notifies a fleet pico's children of the other children eid's which they could then use to communicate to each other.
