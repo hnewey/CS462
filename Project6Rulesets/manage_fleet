@@ -87,16 +87,6 @@ ruleset manage_fleet {
 		}
 	}
 	
-	rule pico_child_created {
-		select when pico ruleset_added
-		pre {
-			vehicle_vin = event:attr("vin")
-		}
-		fired {
-			raise car event "profile_updated"
-				attributes { "vin": vehicle_vin, "longTrip": tripThreshold }
-		}
-	}
 }
 
 
