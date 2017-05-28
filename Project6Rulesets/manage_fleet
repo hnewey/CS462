@@ -104,10 +104,6 @@ ruleset manage_fleet {
 			vehicle_vin = vehicle_vin
 			child_to_delete = child_to_delete
 			exists = exists
-		if exists then
-			send_directive("vehicle removed")
-				with vehicle_vin = vehicle_vin
-						 child_to_delete = child_to_delete
 		fired {
 			raise pico event "delete_child_request"
 				attributes child_to_delete;
