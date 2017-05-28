@@ -17,6 +17,7 @@ ruleset manage_fleet {
 			keys = ent:vehicles.keys();
 			value = keys.map(function(x) {ent:vehicles.values([x])});
 		}
+		tripThreshold = 400;
 	}
 
 	rule clear_fleet {
@@ -68,9 +69,46 @@ ruleset manage_fleet {
 				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
 				  "domain": "pico", "type": "new_ruleset",
 					"attrs": { "rid": "trip_store", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "track_trips", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "vehicle_profile", "vehicle_vin": vehicle_vin } } )
 		fired {
 			ent:vehicles := ent:vehicles.defaultsTo({});
 			ent:vehicles{[vehicle_vin]} := the_vehicle
+			raise pico event "child_finished"
+				attributes { "vin": vehicle_vin }
+		}
+	}
+	
+	rule pico_child_created {
+		select when pico child_finished
+		pre {
+			vehicle_vin = event:attr("vin")
+		}
+		fired {
+			raise car event "profile_updated"
+				attributes { "vin": vehicle_vin, "longTrip": tripThreshold }
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
