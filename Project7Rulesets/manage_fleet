@@ -41,7 +41,7 @@ ruleset manage_fleet {
 		}
 		if exists then
 			send_directive("fleet exists with name:")
-				name = fleetName
+				with name = fleetName
 	}
 
 	rule subfleet_needed {
@@ -95,7 +95,7 @@ ruleset manage_fleet {
 			fleetName = event:attr("rs_attrs"){"dname"}
 			description = event:attr("rs_attrs"){"description"}
 		}
-		if fleetName.klog(FOUND FLEET NAME ")
+		if fleetName.klog("FOUND FLEET NAME ")
 		then
 			event:send(
 				{ "eci": the_subfleet.eci, "eid": "install-ruleset",
