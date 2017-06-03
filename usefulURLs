@@ -30,3 +30,9 @@ http://localhost:8080/sky/cloud/cj37x824t0001o6dujgbohsav/manage_fleet/vehicles
 		}
 	}
 
+
+		if exists then
+			send_directive("vehicle removed")
+				with vehicle_vin = vehicle_vin
+						 child_to_delete = child_to_delete
+

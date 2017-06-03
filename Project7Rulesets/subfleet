@@ -1,0 +1,19 @@
+ruleset subfleet {
+	meta {
+	}
+
+	global {
+	}
+
+	rule subfleet_created {
+		select when fleet subfleet_created
+		pre {
+			name = event:attr("name");
+			description = event:attr("description");
+		}
+		always {
+			ent:name := name.defaultsTo(time:now());
+			ent:description := description.defaultsTo("This is a subfleet");
+		}		
+	}
+}

@@ -1,0 +1,174 @@
+ruleset manage_fleet {
+
+	meta {
+		provides vehicles, showChildFromVin
+		shares vehicles, showChildFromVin
+		use module io.picolabs.pico alias wrangler
+	}
+
+	global {
+		nameFromVin = function(vehicle_vin) {
+			"Vehicle " + vehicle_vin + " Pico"
+		}
+		childFromVin = function(vehicle_vin) {
+			ent:vehicles{vehicle_vin}
+		}
+		showChildren = function() {
+			wrangler:children()
+		}
+		showChildFromVin = function() {
+			ent:vehicles{"1240"}
+		}
+		vehicles = function() {
+			keys = ent:vehicles.keys();
+			value = keys.map(function(x) {ent:vehicles.values([x])});
+		}
+		tripThreshold = 400;
+	}
+
+	rule clear_fleet {
+		select when fleet clear
+		always {
+			ent:vehicles := {}
+		}
+	}
+
+	rule subfleet_exists {
+		select when fleet subfleet
+		pre {
+			fleetName = event:attr("name")
+			exists = ent:subfleets >< fleetName
+		}
+		if exists then
+			send_directive("fleet exists with name:")
+				name = fleetName
+	}
+
+	rule subfleet_needed {
+		select when fleet subfleet
+		pre {
+			fleetName = event:attr("name")
+			description = event:attr("description")
+			exists = ent:subfleets >< fleetName
+		}
+		if not exists then
+			noop()
+		fired {
+			raise pico event "new_child_request"
+				attributes { "dname": fleetName,
+										 "description": description,
+										 "color": "#6ea8cc" }
+		}		
+	}
+
+	rule car_already_exists {
+		select when car new_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin
+		}
+		if exists then
+			send_directive("vehicle exists")
+				with vehicle_vin = vehicle_vin
+	}
+
+	rule car_needed {
+		select when car new_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin			
+		}
+		if not exists then
+			noop()
+		fired {
+			raise pico event "new_child_request"
+				attributes { "dname": nameFromVin(vehicle_vin),
+										 "color": "#e0873e",
+										 "vehicle_vin": vehicle_vin }
+		}
+	}
+
+	rule subfleet_initialized {
+		select when pico child_initialized
+		pre {
+			the_subfleet = event:attr("new_child")
+			fleetName = event:attr("rs_attrs"){"dname"}
+			description = event:attr("rs_attrs"){"description"}
+		}
+		if fleetName.klog(FOUND FLEET NAME ")
+		then
+			event:send(
+				{ "eci": the_subfleet.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "subfleet", "name": fleetName, "description": description } } )
+			event:send (
+				{ "eci": the_subfleet.eci, "eid": "set_subfleet",
+					"domain": "fleet", "type": "subfleet_created",
+					"attrs": { "name": fleetName, "description": description } } )
+	}
+
+	rule pico_child_initialized {
+		select when pico child_initialized
+		pre {
+			the_vehicle = event:attr("new_child")
+			vehicle_vin = event:attr("rs_attrs"){"vehicle_vin"}
+		}
+		if vehicle_vin.klog("FOUND VEHICLE_VIN ")
+		then
+			event:send(
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "trip_store", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "track_trips", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "vehicle_profile", "vehicle_vin": vehicle_vin } } )
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "update_car_profile",
+					"domain": "car", "type": "profile_updated",
+					"attrs": { "vin": vehicle_vin, "longTrip": tripThreshold } } )
+		fired {
+			ent:vehicles := ent:vehicles.defaultsTo({});
+			ent:vehicles{[vehicle_vin]} := the_vehicle;
+		}
+	}
+
+	rule remove_vehicle {
+		select when car unneeded_vehicle
+		pre {
+			vehicle_vin = event:attr("vin")
+			exists = ent:vehicles >< vehicle_vin
+			child_to_delete = childFromVin(vehicle_vin)
+		}
+		if exists then
+			send_directive("vehicle removed")
+				with vehicle_vin = vehicle_vin
+						 child_to_delete = child_to_delete
+		fired {
+			raise pico event "delete_child_request"
+				attributes child_to_delete;
+			ent:vehicles{[vehicle_vin]} := null
+		}
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
