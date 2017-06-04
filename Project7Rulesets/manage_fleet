@@ -163,7 +163,7 @@ ruleset manage_fleet {
 	rule introduce_vehicle {
 		select when fleet introduce 
 		pre {
-			fleetName = event:attr("fleet")
+			fleetName = event:attr("name")
 			fleeteid = ent:subfleets{fleetName}.klog("FLEET EID: ")
 			vin = event:attr("vin")
 			vehicleeid = ent:vehicles{vin}.klog("VEHICLE EID: ")
