@@ -169,7 +169,7 @@ ruleset manage_fleet {
 			existsFleet = ent:subfleets >< fleetName
 			existsVehicle = ent:vehicles >< vin
 		}
-		if fleeteid && vehicleeid then {
+		if fleeteid && vehicleeid then 
 			event:send (
  	     { "eci": fleeteid, "eid": "subscription",
   	     "domain": "wrangler", "type": "subscription",
@@ -179,7 +179,7 @@ ruleset manage_fleet {
                     "subscriber_role": "vehicle",
                     "channel_type": "subscription",
                     "subscriber_eci": vehicleeid } } )
-		}
+		
 
 	}
 	
