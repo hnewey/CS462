@@ -164,9 +164,9 @@ ruleset manage_fleet {
 		select when fleet introduce 
 		pre {
 			fleetName = event:attr("name")
-			fleeteid = ent:subfleets{fleetName}{"eci"}.klog("FLEET EID: ")
+			fleeteid = ent:subfleets{[fleetName, "eci"]}.klog("FLEET EID: ")
 			vin = event:attr("vin")
-			vehicleeid = ent:vehicles{vin}{"eci"}.klog("VEHICLE EID: ")
+			vehicleeid = ent:vehicles{[vin, "eci"]}.klog("VEHICLE EID: ")
 			existsFleet = ent:subfleets >< fleetName
 			existsVehicle = ent:vehicles >< vin
 		}
