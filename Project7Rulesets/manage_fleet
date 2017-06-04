@@ -105,6 +105,10 @@ ruleset manage_fleet {
 				{ "eci": the_subfleet.eci, "eid": "set_subfleet",
 					"domain": "fleet", "type": "subfleet_created",
 					"attrs": { "name": fleetName, "description": description } } )
+		fired {
+			ent:subfleets := ent:subfleets.defaultsTo({});
+			ent:subfleets{[fleetName]} := the_subfleet;
+		}
 	}
 
 	rule pico_child_initialized {
@@ -159,18 +163,24 @@ ruleset manage_fleet {
 		select when fleet introduce 
 		pre {
 			fleetName = event:attr("fleet")
+			fleeteid = ent:subfleets{fleetName}
 			vin = event:attr("vin")
+			vehicleeid = ent:vehicles{vin}
 			existsFleet = ent:subfleets >< fleetName
 			existsVehicle = ent:vehicles >< vin
 		}
-		if not existsFleet && not existsVehicle
-		then
-			send_directive("Invalid fleet name or vin")
-			with subFleet = fleetName
-					 vin = vin
-		fired {
-			noop()
+		if fleeteid && vehicleeid then {
+			event:send (
+ 	     { "eci": fleeteid, "eid": "subscription",
+  	     "domain": "wrangler", "type": "subscription",
+         "attrs": { "name": nameFromVin(vin),
+                    "name_space": "subfleet",
+                    "my_role": "controller",
+                    "subscriber_role": "vehicle",
+                    "channel_type": "subscription",
+                    "subscriber_eci": vehicleeid } } )
 		}
+
 	}
 	
 }
