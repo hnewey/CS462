@@ -154,6 +154,24 @@ ruleset manage_fleet {
 			ent:vehicles{[vehicle_vin]} := null
 		}
 	}
+
+	rule introduce_vehicle {
+		select when fleet introduce 
+		pre {
+			fleetName = event:attr("fleet")
+			vin = event:attr("vin")
+			existsFleet = ent:subfleets >< fleetName
+			existsVehicle = ent:vehicles >< vin
+		}
+		if not existsFleet && not existsVehicle
+		then
+			send_directive("Invalid fleet name or vin")
+			with subFleet = fleetName
+					 vin = vin
+		fired {
+			noop()
+		}
+	}
 	
 }
 
