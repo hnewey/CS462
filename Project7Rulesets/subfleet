@@ -1,9 +1,14 @@
 ruleset subfleet {
 	meta {
+		provides info
+		shares info
 		use module Subscriptions
 	}
 
 	global {
+		info = function() {
+			Subscriptions:getSubscriptions();
+		}
 	}
 
 	rule subfleet_created {
@@ -28,5 +33,6 @@ ruleset subfleet {
         attributes attributes
     }
   }
+
 
 }
