@@ -56,6 +56,7 @@ ruleset manage_fleet {
 		fired {
 			raise pico event "new_child_request"
 				attributes { "dname": fleetName,
+										 "fleetName": fleetName,
 										 "description": description,
 										 "color": "#6ea8cc" }
 		}		
@@ -92,7 +93,7 @@ ruleset manage_fleet {
 		select when pico child_initialized
 		pre {
 			the_subfleet = event:attr("new_child")
-			fleetName = event:attr("rs_attrs"){"dname"}
+			fleetName = event:attr("rs_attrs"){"fleetName"}
 			description = event:attr("rs_attrs"){"description"}
 		}
 		if fleetName.klog("FOUND FLEET NAME ")
@@ -163,9 +164,9 @@ ruleset manage_fleet {
 		select when fleet introduce 
 		pre {
 			fleetName = event:attr("fleet")
-			fleeteid = ent:subfleets{fleetName}
+			fleeteid = ent:subfleets{fleetName}.klog("FLEET EID: ")
 			vin = event:attr("vin")
-			vehicleeid = ent:vehicles{vin}
+			vehicleeid = ent:vehicles{vin}.klog("VEHICLE EID: ")
 			existsFleet = ent:subfleets >< fleetName
 			existsVehicle = ent:vehicles >< vin
 		}
