@@ -24,7 +24,7 @@ ruleset manage_fleet {
 			value = keys.map(function(x) {ent:vehicles.values([x])});
 		}
 		setReportId = function(id) {
-			ent:fleet_report{} = id;
+			ent:fleet_report{[id]};
 		}
 		tripThreshold = 400;
 	}
@@ -187,7 +187,7 @@ ruleset manage_fleet {
 			//if not exists_id then
 				//setReportId(correlation_id)
 		fired {
-			ent:fleet_report.put([correlation_id], vehicle_report)
+			ent:fleet_report.put([correlation_id], vehicle_report);
 			ent:reports_received := reports_received
 		}
 	}
