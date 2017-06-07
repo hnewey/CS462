@@ -1,6 +1,7 @@
 ruleset track_trips {
 	meta {
                 use module vehicle_profile
+		use module trip_store
 		use module edmonds_keys
 		use module edmonds_api
 				with api_key = keys:edmonds("api_key")
@@ -8,6 +9,9 @@ ruleset track_trips {
 
 	global {
 		long_trip = 20;
+		tracks = function() {
+			return = trip_store:trips();
+		}
 	}
 
 	rule process_trips {
@@ -47,5 +51,19 @@ ruleset track_trips {
 		}
 		send_directive("finding_vin") with
 			finding_vin = vehicleInfo
+	}
+
+	rule create_report {
+		select when vehicle get_trips
+		pre {
+			correlation_id = event:attr("correlation_id").klog("GETTING REPORT AND ID IS ")
+			trips = trips();
+		}
+		fired {
+			raise fleet event "receive_report"
+				attributes { "dname": "vehicle_report",
+										 "correlation_id": correlation_id,
+										 "vehicle_report": trips }			
+		}
 	}
 }

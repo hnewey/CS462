@@ -21,6 +21,7 @@ http://localhost:8080/sky/cloud/cj37x824t0001o6dujgbohsav/manage_fleet/vehicles
 
 http://localhost:8080/sky/event/cj3hn1hkm0001dldu6akafv7d/2000/fleet/subfleet?name=testFleet
 
+http://localhost:8080/sky/cloud/cj3i5oxm5000hxrduchjd8ofn/subfleet/info
 
 	rule pico_child_created {
 		select when pico ruleset_added

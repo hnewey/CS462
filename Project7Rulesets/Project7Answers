@@ -1,0 +1,5 @@
+1. I called it set_subfleet because that seemed appropriate to me. When we create the subfleet, we also set the name and description so I felt that was a good name for the event.
+
+2. Because if anyone has the eci for my subfleet, they can be added as a subscriber and I would treat them as such. If I'm passing sensitive information to my subscribers, the rouge subscriber will get that information as well.
+
+3. I would think you could but when I try to do it, the subscription isn't added to the second subfleet.
