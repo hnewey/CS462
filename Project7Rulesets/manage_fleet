@@ -166,7 +166,7 @@ ruleset manage_fleet {
 	rule new_fleet_report {
 		select when fleet report
 		pre {
-			correlation_id = random:word()
+			correlation_id = random:integer(lower = 0, upper = 100000) + "test"
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
