@@ -1,8 +1,8 @@
 ruleset manage_fleet {
 
 	meta {
-		provides vehicles, showChildFromVin
-		shares vehicles, showChildFromVin
+		provides vehicles, showChildFromVin, showChildren
+		shares vehicles, showChildFromVin, showChildren
 		use module io.picolabs.pico alias wrangler
 	}
 
