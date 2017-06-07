@@ -17,7 +17,7 @@ ruleset manage_fleet {
 			wrangler:children()
 		}
 		showChildFromVin = function() {
-			ent:vehicles{"1240"}
+			ent:vehicles{"0001"}
 		}
 		vehicles = function() {
 			keys = ent:vehicles.keys();
