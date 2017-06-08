@@ -170,8 +170,8 @@ ruleset manage_fleet {
 	rule new_fleet_report {
 		select when fleet report
 		pre {
-			correlation_id = "0001" + "test"
-			vehicleECIs = vehicleECIs()
+			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
+			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
