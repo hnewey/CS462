@@ -19,9 +19,12 @@ ruleset manage_fleet {
 		showChildFromVin = function() {
 			ent:vehicles{"0001"}
 		}
+/////*************
+/////The answer to sending an event to just vehicles should be here
+/////****************
 		vehicles = function() {
 			keys = ent:vehicles.keys();
-			value = keys.map(function(x) {ent:vehicles.values([x])});
+			value = keys.map(function(x) {ent:vehicles.values([x, "eci"])});
 		}
 		setReportId = function(id) {
 			ent:fleet_report{[id]};
