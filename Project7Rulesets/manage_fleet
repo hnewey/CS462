@@ -19,10 +19,11 @@ ruleset manage_fleet {
 		showChildFromVin = function() {
 			ent:vehicles{"0001"}
 		}
-/////*************
-/////The answer to sending an event to just vehicles should be here
-/////****************
 		vehicles = function() {
+			keys = ent:vehicles.keys();
+			value = keys.map(function(x) {ent:vehicles.values([x])});
+		}
+		vehicleECIs = function() {
 			keys = ent:vehicles.keys();
 			value = keys.map(function(x) {ent:vehicles.values([x])[1]});
 		}
@@ -170,12 +171,16 @@ ruleset manage_fleet {
 		select when fleet report
 		pre {
 			correlation_id = "0001" + "test"
+			vehicleECIs = vehicleECIs()
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
-			raise vehicle event "get_trips"
-				attributes { "dname": "fleet_report",
-										 "correlation_id": correlation_id }
+			vehicleECIs.map(function(x) {
+				event:send(
+					{ "eci": x, "eid": "new report",
+					  "domain": "vehicle", "type": "get_trips",
+						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
+			});
 		}
 	}
 
