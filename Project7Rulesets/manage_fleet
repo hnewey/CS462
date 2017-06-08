@@ -11,7 +11,7 @@ ruleset manage_fleet {
 			"Vehicle " + vehicle_vin + " Pico"
 		}
 		childFromVin = function(vehicle_vin) {
-			ent:vehicles{vehicle_vin, "eci"}
+			ent:vehicles{[vehicle_vin, "eci"]}
 		}
 		showChildren = function() {
 			wrangler:children()
