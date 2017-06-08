@@ -24,7 +24,7 @@ ruleset manage_fleet {
 /////****************
 		vehicles = function() {
 			keys = ent:vehicles.keys();
-			value = keys.map(function(x) {ent:vehicles.values([x])});
+			value = keys.map(function(x) {ent:vehicles.values([x, 1])});
 		}
 		setReportId = function(id) {
 			ent:fleet_report{[id]};
