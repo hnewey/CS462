@@ -16,7 +16,7 @@ ruleset vehicle_profile {
 	rule update_profile {
 		select when car profile_updated
 		pre {
-			vin = event:attr("vin");
+			vin = event:attr("vin").klog("UPDATING PROFILE ");
 			longTrip = event:attr("longTrip");
 		}
 		always {
