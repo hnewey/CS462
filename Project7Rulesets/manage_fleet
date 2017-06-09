@@ -175,12 +175,10 @@ ruleset manage_fleet {
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
-			vehicleECIs.map(function(x) {
 				event:send(
-					{ "eci": x, "eid": "new report",
+					{ "eci": "cj3iac03n0009s3dufpfd0m5a", "eid": "new_report",
 					  "domain": "vehicle", "type": "get_trips",
-						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
-			});
+						"attrs": { "correlation_id": correlation_id } } )
 		}
 	}
 
