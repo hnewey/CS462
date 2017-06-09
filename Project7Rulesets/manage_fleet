@@ -169,18 +169,16 @@ ruleset manage_fleet {
 
 	rule new_fleet_report {
 		select when fleet report
+		foreach vehicleECIs() setting (e)
 		pre {
 			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
-			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
 			this = meta:eci.klog("THIS IS: ")
 		}
-		if vehicleECIs then
-			vehicleECIs.map(function(x) {
+		if e.klog("****ECI IN FOREACH IS: ") then
 				event:send(
-					{ "eci": x, "eid": "new report",
+					{ "eci": e, "eid": "new report",
 					  "domain": "vehicle", "type": "get_trips",
 						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
-			});
 		
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
