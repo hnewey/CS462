@@ -122,7 +122,7 @@ ruleset manage_fleet {
 	rule pico_child_initialized {
 		select when pico child_initialized
 		pre {
-			the_vehicle = event:attr("new_child")
+			the_vehicle = event:attr("new_child").klog("NEW CAR: ")
 			vehicle_vin = event:attr("rs_attrs"){"vehicle_vin"}
 		}
 		if vehicle_vin.klog("FOUND VEHICLE_VIN ")
