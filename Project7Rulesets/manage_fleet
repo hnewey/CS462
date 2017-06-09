@@ -172,7 +172,6 @@ ruleset manage_fleet {
 		pre {
 			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
 			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
-			metaECI = meta:eci().klog("META ECI IS: ")
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
