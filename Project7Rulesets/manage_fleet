@@ -175,10 +175,8 @@ ruleset manage_fleet {
 		}
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
-				event:send(
-					{ "eci": "cj3iac03n0009s3dufpfd0m5a", "eid": "new report",
-					  "domain": "vehicle", "type": "get_trips",
-						"attrs": { "correlation_id": correlation_id } } )
+				event:send({"cid": "cj3iac03n0009s3dufpfd0m5a"}, "vehicle", "get_trips")
+				with attrs = {"correlation_id": correlation_id};
 		}
 	}
 
