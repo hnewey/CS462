@@ -171,7 +171,7 @@ ruleset manage_fleet {
 		select when fleet report
 		foreach vehicleECIs() setting (e)
 		pre {
-			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
+			correlation_id = ent:correlation_num.defaultsTo(1000) + "test".klog("CORRELATION ID: ")
 			this = meta:eci.klog("THIS IS: ")
 		}
 		if e.klog("****ECI IN FOREACH IS: ") then
@@ -182,6 +182,8 @@ ruleset manage_fleet {
 		
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
+			ent:reports_received := 0;
+			ent:correlation_num := ent:correlation_num.defaultsTo(1000) + 1;
 		}
 	}
 
