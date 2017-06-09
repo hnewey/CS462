@@ -172,18 +172,18 @@ ruleset manage_fleet {
 		pre {
 			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
 			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
+			this = meta:eci
 		}
 		if vehicleECIs then
+			vehicleECIs.map(function(x) {
 				event:send(
-					{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "create_report",
-					  "domain": "vehicle", "type": "create_report",
-						"attrs": { "correlation_id": correlation_id } } )
+					{ "eci": x, "eid": "new report",
+					  "domain": "vehicle", "type": "get_trips",
+						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
+			});
 		
 		fired {
-			event:send (
-				{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "update_car_profile",
-					"domain": "car", "type": "profile_updated",
-					"attrs": { "vin": vehicle_vin, "longTrip": tripThreshold } } );
+			ent:fleet_report := ent:fleet_report.defaultsTo({});
 		}
 	}
 
