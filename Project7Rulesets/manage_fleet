@@ -198,7 +198,7 @@ ruleset manage_fleet {
 			ent:fleet_report{[correlation_id, "vehicles"]} := vehicleECIs().length();
 			ent:fleet_report{[correlation_id, "responding"]} := reports_received;
 			ent:fleet_report{[correlation_id, "trips"]} := vehicle_report;
-			ent:reports_received := reports_received
+			ent:reports_received := reports_received;
 			ent:correlation_num := ent:correlation_num.defaultsTo(1000) + 1;
 		}
 	}
