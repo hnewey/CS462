@@ -1,5 +1,6 @@
 ruleset track_trips {
 	meta {
+		shares trips
                 use module vehicle_profile
 		use module trip_store
 		use module edmonds_keys
@@ -9,7 +10,7 @@ ruleset track_trips {
 
 	global {
 		long_trip = 20;
-		tracks = function() {
+		trips = function() {
 			return = trip_store:trips();
 		}
 	}
@@ -56,13 +57,13 @@ ruleset track_trips {
 	rule create_report {
 		select when vehicle get_trips
 		pre {
-			correlation_id = event:attr("correlation_id").klog("GETTING REPORT AND ID IS ")
-			originator = event:attr("originator").klog("ORIGINATOR ECI IS: ")
-			trips = trips();
+			correlation_id = event:attr("correlation_id")
+			originator = event:attr("originator")
+			trips = trips().klog("****TRIPS REPORT: ")
 		}
 		event:send(
 			{ "eci": originator, "eid": "new report",
 				"domain": "fleet", "type": "receive_report",
-				"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
+				"attrs": { "rid": "track_trips", "correlation_id": correlation_id, "vehicle_report": trips } } )
 	}
 }

@@ -191,11 +191,12 @@ ruleset manage_fleet {
 			correlation_id = event:attr("correlation_id").klog("REPORT RECEIVED ID IS: ")
 			vehicle_report = event:attr("vehicle_report").klog("VEHICLE REPORT IS: ")
 			reports_received = ent:reports_received.defaultsTo("0") + 1.klog("NUM REPORTS RECEIVED: ")
-			exists_id = ent:fleet_report >< correlation_id
 		}
 		fired {
-			ent:fleet_report.put([correlation_id], vehicle_report);
-			ent:reports_received := reports_received
+			ent:trips{[passed_id, "trip", "mileage"]} := passed_mileage;
+			ent:fleet_report{[correlation_id, "vehicles"]} := vehicleECIs().length();
+			ent:fleet_report{[correlation_id, "responding"]} := reports_received;
+			ent:fleet_report{[correlation_id, "trips"]} := vehicle_report;
 		}
 	}
 
