@@ -1,8 +1,8 @@
 ruleset manage_fleet {
 
 	meta {
-		provides vehicles, showChildFromVin, showChildren, childFromVin
-		shares vehicles, showChildFromVin, showChildren, childFromVin
+		provides vehicles, showChildFromVin, showChildren, childFromVin, report
+		shares vehicles, showChildFromVin, showChildren, childFromVin, report
 		use module io.picolabs.pico alias wrangler
 	}
 
@@ -18,6 +18,9 @@ ruleset manage_fleet {
 		}
 		showChildFromVin = function() {
 			ent:vehicles{"0001"}
+		}
+		report = function() {
+			ent:fleet_report;
 		}
 		vehicles = function() {
 			keys = ent:vehicles.keys();
