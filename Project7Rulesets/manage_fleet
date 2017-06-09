@@ -183,7 +183,6 @@ ruleset manage_fleet {
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
 			ent:reports_received := 0;
-			ent:correlation_num := ent:correlation_num.defaultsTo(1000) + 1;
 		}
 	}
 
@@ -200,6 +199,7 @@ ruleset manage_fleet {
 			ent:fleet_report{[correlation_id, "responding"]} := reports_received;
 			ent:fleet_report{[correlation_id, "trips"]} := vehicle_report;
 			ent:reports_received := reports_received
+			ent:correlation_num := ent:correlation_num.defaultsTo(1000) + 1;
 		}
 	}
 
