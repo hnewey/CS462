@@ -57,13 +57,12 @@ ruleset track_trips {
 		select when vehicle get_trips
 		pre {
 			correlation_id = event:attr("correlation_id").klog("GETTING REPORT AND ID IS ")
+			originator = event:attr("originator").klog("ORIGINATOR ECI IS: ")
 			trips = trips();
 		}
-		fired {
-			raise fleet event "receive_report"
-				attributes { "dname": "vehicle_report",
-										 "correlation_id": correlation_id,
-										 "vehicle_report": trips }			
-		}
+		event:send(
+			{ "eci": originator, "eid": "new report",
+				"domain": "fleet", "type": "receive_report",
+				"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
 	}
 }
