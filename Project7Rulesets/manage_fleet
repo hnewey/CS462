@@ -180,11 +180,6 @@ ruleset manage_fleet {
 						"attrs": { "correlation_id": correlation_id } } );
 		
 		fired {
-			//ent:fleet_report := ent:fleet_report.defaultsTo({});
-				//event:send(
-					//{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "create_report",
-					  //"domain": "vehicle", "type": "create_report",
-						//"attrs": { "correlation_id": correlation_id } } );
 			event:send (
 				{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "update_car_profile",
 					"domain": "car", "type": "profile_updated",
