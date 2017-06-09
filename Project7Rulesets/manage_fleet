@@ -177,7 +177,7 @@ ruleset manage_fleet {
 				event:send(
 					{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "create_report",
 					  "domain": "vehicle", "type": "create_report",
-						"attrs": { "correlation_id": correlation_id } } );
+						"attrs": { "correlation_id": correlation_id } } )
 		
 		fired {
 			event:send (
