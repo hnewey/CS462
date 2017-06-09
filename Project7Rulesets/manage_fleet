@@ -188,13 +188,11 @@ ruleset manage_fleet {
 	rule report_received {
 		select when fleet receive_report
 		pre {
-			correlation_id = event:attr("correlation_id")
-			vehicle_report = event:attr("vehicle_report")
-			reports_received = ent:reports_received.defaultsTo("0") + 1
+			correlation_id = event:attr("correlation_id").klog("REPORT RECEIVED ID IS: ")
+			vehicle_report = event:attr("vehicle_report").klog("VEHICLE REPORT IS: ")
+			reports_received = ent:reports_received.defaultsTo("0") + 1.klog("NUM REPORTS RECEIVED: ")
 			exists_id = ent:fleet_report >< correlation_id
 		}
-			//if not exists_id then
-				//setReportId(correlation_id)
 		fired {
 			ent:fleet_report.put([correlation_id], vehicle_report);
 			ent:reports_received := reports_received
