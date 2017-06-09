@@ -172,7 +172,7 @@ ruleset manage_fleet {
 		pre {
 			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
 			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
-			this = meta:eci
+			this = meta:eci.klog("THIS IS: ")
 		}
 		if vehicleECIs then
 			vehicleECIs.map(function(x) {
