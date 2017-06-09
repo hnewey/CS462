@@ -176,9 +176,13 @@ ruleset manage_fleet {
 		fired {
 			ent:fleet_report := ent:fleet_report.defaultsTo({});
 				event:send(
-					{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "new_report",
-					  "domain": "vehicle", "type": "get_trips",
-						"attrs": { "correlation_id": correlation_id } } )
+					{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "create_report",
+					  "domain": "vehicle", "type": "create_report",
+						"attrs": { "correlation_id": correlation_id } } );
+			event:send (
+				{ "eci": the_vehicle.eci, "eid": "update_car_profile",
+					"domain": "car", "type": "profile_updated",
+					"attrs": { "vin": vehicle_vin, "longTrip": tripThreshold } } );
 		}
 	}
 
