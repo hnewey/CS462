@@ -45,7 +45,7 @@ ruleset chat_system {
 			message_text = event:attr("rs_attrs"){"message_text"}
 		}
 		if user_name.klog("FOUND USER ")
-		then {
+		then every {
 			event:send(
 				{ "eci": the_user.eci, "eid": "install-ruleset",
 				  "domain": "pico", "type": "new_ruleset",

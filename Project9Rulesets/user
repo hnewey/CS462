@@ -4,9 +4,6 @@ ruleset user {
 	}
 
 	global {
-		get_scheduled_events = function() {
-			return = schedule:list();
-		}
 	}
 
 
@@ -39,9 +36,9 @@ ruleset user {
 	rule user_scheduled_events {
 		select when user scheduled_events
 		pre {
-			events = get_scheduled_events()
+			events = schedule:list()
 		}
-		send directive("scheduled events:")
+		send_directive("scheduled events:")
 			with events = events
 	}
 
