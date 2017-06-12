@@ -4,6 +4,9 @@ ruleset chat_system {
 	}
 
 	global {
+		get_eci = function(user_name) {
+			ent:users{[user_name, "eci"]}
+		}
 	}
 
 	rule user_exists {
@@ -12,11 +15,14 @@ ruleset chat_system {
 			user_name = event:attr("name")
 			message_text = event:attr("message")
 			exists = ent:users >< user_name
+			user_eci = get_eci(user_name).klog("****USER ECI IS: ")
 		}
-		if exists then
-			send_directive("user exists and sent message:")
-				with  user_name = user_name
-							message_text = message_text
+		if exists then {
+			event:send(
+				{ "eci": user_eci, "eid": "new message",
+				  "domain": "user", "type": "new_message",
+					"attrs": { "user_name": user_name, "message_text": message_text } } )
+		}
 	}
 
 	rule user_needed {

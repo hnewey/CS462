@@ -1,0 +1,68 @@
+<!doctype html>
+<meta charset="UTF-8">
+<html>
+<head>
+    <title>Chat</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<script type="text/javascript">
+    function addMessage(input) {
+	var user = document.getElementById("userID").value;
+        var message = document.getElementById("messageID").value;
+	var url = "http://localhost:8080/sky/event/cj3umi2ag0002widuvhhc92ys/2000/chat/user?name=" + user + "&message=" + message;
+        httpPost(url, null);
+    }
+
+    function httpPost(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("POST", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+    function httpGet(theUrl, callback) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.onreadystatechange = function() { 
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                callback(xmlHttp.responseText);
+        }
+        xmlHttp.open("GET", theUrl, true); 
+        xmlHttp.send(null);
+    }
+
+</script>
+<style>
+    iframe {
+	display: none;
+    }
+    td {
+	width: 90px;
+    }
+</style>
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="page-header">
+            <h1>Chat</h1>
+        </div>
+        <div class="sub-area">
+            <h3>New Message</h3>
+        </div>
+        <form target="frame" onsubmit="addMessage(this)">
+            <input type="text" name="user_name" id="userID" placeholder="username" value="testUser">
+	    <input type="text" name="message" id="messageID" placeholder="message">
+            <button type="submit">Send</button>
+        </form>
+
+	<div id="chatDiv">
+	<br><h3>Messages:</h3>
+	</div>
+
+    </div>
+    <iframe name="frame"></iframe>
+</div>
+</body>
+</html>
