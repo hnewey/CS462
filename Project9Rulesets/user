@@ -52,6 +52,18 @@ ruleset user {
 			with user_name = user_name
 	}
 
+	rule new_messsage {
+		select when user new_message
+		pre {
+			new_message = event:attr("message_text").klog("****NEW MESSAGE IS: ")
+			originID = meta:picoId.klog("****Origin ID is: ")
+			sequence = ent:sequence.defaultsTo(0) + 1
+			messageID = originID + ":" + sequence.klog("***MESSAGE ID IS: ")
+		}
+		send_directive("new message")
+			with message = new_message
+	}
+
   rule auto_accept {
     select when wrangler inbound_pending_subscription_added
     pre {
