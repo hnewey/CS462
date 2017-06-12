@@ -50,6 +50,10 @@ ruleset chat_system {
 				{ "eci": the_user.eci, "eid": "install-ruleset",
 				  "domain": "pico", "type": "new_ruleset",
 					"attrs": { "rid": "user", "user_name": user_name, "message_text": message_text } } )
+			event:send(
+				{ "eci": the_user.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "Subscriptions" } } )
 			event:send (
 				{ "eci": the_user.eci, "eid": "new_user",
 					"domain": "user", "type": "new_user",
