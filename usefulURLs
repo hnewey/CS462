@@ -40,3 +40,75 @@ http://localhost:8080/sky/cloud/cj3i5oxm5000hxrduchjd8ofn/subfleet/info
 				with vehicle_vin = vehicle_vin
 						 child_to_delete = child_to_delete
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				raise vehicle event "get_trips"
+					attributes { "dname": "fleet_report",
+										 	 "correlation_id": correlation_id }
+
+
+
+
+
+
+			vehicleECIs.map(function(x) {
+				event:send(
+					{ "eci": x, "eid": "new report",
+					  "domain": "vehicle", "type": "get_trips",
+						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
+			});
+
+
+				event:send({"cid": "cj3iac03n0009s3dufpfd0m5a"}, "vehicle", "get_trips")
+				with attrs = {"correlation_id": correlation_id};
+
+
+			//ent:fleet_report := ent:fleet_report.defaultsTo({});
+				//event:send(
+					//{ "eci": "cj3p5oa9w0003fydui6sg1cso", "eid": "create_report",
+					  //"domain": "vehicle", "type": "create_report",
+						//"attrs": { "correlation_id": correlation_id } } );
+
+
+	rule new_fleet_report {
+		select when fleet report
+		pre {
+			correlation_id = "0001" + "test".klog("CORRELATION ID: ")
+			vehicleECIs = vehicleECIs().klog("VEHICLE ECI'S ARE: ")
+			this = meta:eci.klog("THIS IS: ")
+		}
+		if vehicleECIs then
+			vehicleECIs.map(function(x) {
+				event:send(
+					{ "eci": x, "eid": "new report",
+					  "domain": "vehicle", "type": "get_trips",
+						"attrs": { "rid": "track_trips", "correlation_id": correlation_id } } )
+			});
+		
+		fired {
+			ent:fleet_report := ent:fleet_report.defaultsTo({});
+		}
+	}
+
+
+
+			//if not exists_id then
+				//setReportId(correlation_id)
+
+
+
+			ent:fleet_report.put([correlation_id], vehicle_report);

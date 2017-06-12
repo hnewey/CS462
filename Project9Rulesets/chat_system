@@ -1,0 +1,66 @@
+ruleset chat_system {
+	meta {
+	}
+
+	global {
+	}
+
+	rule create_user {
+		select when 
+	}
+
+	rule user_exists {
+		select when chat user
+		pre {
+			user_name = event:attr("name")
+			message_text = event:attr("message")
+			exists = ent:users >< user_name
+		}
+		if exists then
+			send_directive("user exists and sent message:")
+				with  user_name = user_name
+							message_text = message_text
+	}
+
+	rule user_needed {
+		select when chat user
+		pre {
+			user_name = event:attr("name")
+			message_text = event:attr("message")
+			exists = ent:users >< user_name
+		}
+		if not exists then
+			noop()
+		fired {
+			raise pico event "new_child_request"
+				attributes { "dname": user_name,
+										 "color": "#e0873e",
+										 "user_name": user_name,
+										 "message_text": message_text }
+		}
+	}
+
+	rule pico_child_initialized {
+		select when pico child_initialized
+		pre {
+			the_user = event:attr("new_child").klog("NEW USER: ")
+			user_name = event:attr("rs_attrs"){"user_name"}
+			message_text = event:attr("rs_attrs"){"message_text"}
+		}
+		if user_name.klog("FOUND USER ")
+		then
+			event:send(
+				{ "eci": the_user.eci, "eid": "install-ruleset",
+				  "domain": "pico", "type": "new_ruleset",
+					"attrs": { "rid": "user", "user_name": user_name, "message_text": message_text } } )
+			event:send (
+				{ "eci": the_user.eci, "eid": "new_user",
+					"domain": "user", "type": "new_user",
+					"attrs": { "user_name": user_name, "message_text": message_text } } )
+		fired {
+			ent:users := ent:users.defaultsTo({});
+			ent:users{[user_name]} := the_user;
+		}
+	}
+
+}

@@ -1,0 +1,11 @@
+1. No. My code works by having fleets send report events only to their children. Since picos are the children of only one parent pico, they can't be in more than one parent fleet.
+
+2. I kept an entity variable of vehicle eci's as vehicles were created and I looped through those eci's sending a report event to each one. 
+
+3. You could abstract the report event generating code to a new ruleset and install that on select fleet picos
+
+4. I used klog() inside the track_trips ruleset to show how often it is hit and what the values are there. The logs show those klog() messages the same number of vehicles I have in my fleet even if they may be jumbled up a bit due to the multi-threaded fashion of the scatter-gather system. Then they all come together in a single report.
+
+5. You could either set a timer that the vehicles have to respond by or make sure that a response is still sent even if an error occurs.
+
+6. If an error message is sent back by a certain vehicle, you could try again and if it still fails, you could move ahead with the report, noting that one vehicle failed to generate a report.

@@ -1,0 +1,69 @@
+ruleset user {
+	meta {
+		use module Subscriptions
+	}
+
+	global {
+		get_scheduled_events = function() {
+			return = schedule:list();
+		}
+	}
+
+
+	rule new_user {
+		select when user new_user
+		pre {
+			user_name = event:attr("user_name")
+			message_text = event:attr("message_text")
+		}
+		if user_name then
+			send_directive("user added")
+				with user_name = user_name
+		fired {
+			ent:user_name := user_name.defaultsTo("New User");
+			ent:message := message_text.defaultsTo("This is the text of the message");
+			raise user event "startup";
+		}
+	}
+
+	rule startup_user {
+		select when user startup
+		pre {
+			
+		}
+		always {
+			schedule user event "heartbeat" repeat "*/10 * * * * *"
+		}
+	}
+
+	rule user_scheduled_events {
+		select when user scheduled_events
+		pre {
+			events = get_scheduled_events()
+		}
+		send directive("scheduled events:")
+			with events = events
+	}
+
+	rule user_heartbeat {
+		select when user heartbeat
+		pre {
+			user_name = ent:user_name.klog("***HEARTBEAT USER: ")
+			message = ent:message.klog("***HEARBEAT MESSAGE: ")
+		}
+		send_directive("heartbeat fired")
+			with user_name = user_name
+	}
+
+  rule auto_accept {
+    select when wrangler inbound_pending_subscription_added
+    pre {
+      attributes = event:attrs().klog("subcription:")
+    }
+    always {
+      raise wrangler event "pending_subscription_approval"
+        attributes attributes
+    }
+  }
+
+}
