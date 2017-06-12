@@ -58,7 +58,8 @@ ruleset user {
 			new_message = event:attr("message_text").klog("****NEW MESSAGE IS: ")
 			originID = meta:picoId.klog("****Origin ID is: ")
 			sequence = ent:sequence.defaultsTo(0) + 1
-			messageID = originID + ":" + sequence.klog("***MESSAGE ID IS: ")
+			messageID = originID + ":" + sequence
+			temp = messageID.klog("****MESSAGE ID IS: ")
 		}
 		send_directive("new message")
 			with message = new_message
