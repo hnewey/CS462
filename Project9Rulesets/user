@@ -19,6 +19,9 @@ ruleset user {
 		fired {
 			ent:user_name := user_name.defaultsTo("New User");
 			ent:message := message_text.defaultsTo("This is the text of the message");
+			raise user event "new_message"
+				attributes { "user_name": user_name,
+										 "message_text": message_text }
 			raise user event "startup";
 		}
 	}
@@ -29,6 +32,7 @@ ruleset user {
 			
 		}
 		always {
+			raise user event "new_message"
 			//schedule user event "heartbeat" repeat "*/10 * * * * *"
 		}
 	}
@@ -74,6 +78,20 @@ ruleset user {
 		}
 		send_directive("new message")
 			with message = new_message
+	}
+
+	rule get_messages {
+		select when user messages
+		pre {
+			originator_eci = event:attr("originator_eci")
+			messages = ent:messsages
+		}
+		always {
+			event:send(
+				{ "eci": originator_eci, "eid": "user messages",
+				  "domain": "chat", "type": "user_messages",
+					"attrs": { "messages": messages } } )
+		}
 	}
 
   rule auto_accept {

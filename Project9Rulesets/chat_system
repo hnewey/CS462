@@ -1,11 +1,16 @@
 ruleset chat_system {
 	meta {
+		provides messages
+		shares messages
 		use module io.picolabs.pico alias wrangler
 	}
 
 	global {
 		get_eci = function(user_name) {
 			ent:users{[user_name, "eci"]}
+		}
+		messages = function() {
+			ent:user_messages
 		}
 	}
 
@@ -22,6 +27,32 @@ ruleset chat_system {
 				{ "eci": user_eci, "eid": "new message",
 				  "domain": "user", "type": "new_message",
 					"attrs": { "user_name": user_name, "message_text": message_text } } )
+		}
+	}
+
+	rule get_messages {
+		select when chat messages
+		foreach ent:users setting (user)
+		pre {
+			user_eci = get_eci(user)
+		}
+		if user_eci then {
+			event:send(
+				{ "eci": user_eci, "eid": "get messages",
+				  "domain": "user", "type": "messages",
+					"attrs": { "originator_eci": meta:eci } } )
+		}
+	}
+
+	rule user_messages {
+		select when chat user_messages
+		pre {
+			user_messages = event:attr("user_messages")
+		}
+		send_directive("user messages")
+			with user_messages = user_messages
+		always {
+			ent:user_messages := user_messages
 		}
 	}
 
