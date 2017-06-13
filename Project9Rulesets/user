@@ -21,7 +21,7 @@ ruleset user {
 			ent:message := message_text.defaultsTo("This is the text of the message");
 			raise user event "new_message"
 				attributes { "user_name": user_name,
-										 "message_text": message_text }
+										 "message_text": message_text };
 			raise user event "startup";
 		}
 	}
