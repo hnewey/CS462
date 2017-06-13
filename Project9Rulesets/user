@@ -29,7 +29,18 @@ ruleset user {
 			
 		}
 		always {
-			schedule user event "heartbeat" repeat "*/10 * * * * *"
+			//schedule user event "heartbeat" repeat "*/10 * * * * *"
+		}
+	}
+
+	rule remove_scheduled_events {
+		select when user remove_all_events
+		foreach schedule:list() setting (event)
+		pre {
+			eventID = event{"id"}
+		}
+		always {
+			schedule:remove(eventID)
 		}
 	}
 
