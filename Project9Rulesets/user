@@ -92,7 +92,7 @@ ruleset user {
 			originator_eci = event:attr("originator_eci").klog("***IN USER ORIGINATOR IS: ")
 			messages = getMessages().klog("***MESSAGES IS: ")
 		}
-		always {
+		if messages then {
 			event:send(
 				{ "eci": originator_eci, "eid": "user messages",
 				  "domain": "chat", "type": "user_messages",
