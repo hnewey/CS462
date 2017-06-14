@@ -82,7 +82,7 @@ ruleset user {
 		always {
 			ent:sequence := sequence;
 			ent:messages := ent:messages.defaultsTo({});
-			ent:messages{[messageID]} := new_message;
+			ent:messages{[ent:user_name]} := new_message;
 		}
 	}
 
