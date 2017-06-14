@@ -96,7 +96,7 @@ ruleset user {
 			event:send(
 				{ "eci": originator_eci, "eid": "user messages",
 				  "domain": "chat", "type": "user_messages",
-					"attrs": { "messages": messages } } )
+					"attrs": { "user_messages": messages } } )
 		}
 	}
 
