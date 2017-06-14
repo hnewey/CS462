@@ -73,12 +73,13 @@ ruleset user {
 			random_num = random:integer(1,2).klog("****RANDOM IS: ")
 			new_message = event:attr("message_text").defaultsTo("Test message")
 			originID = meta:picoId.klog("****Origin ID is: ")
-			ent:sequence := ent:sequence.defaultsTo(0) + 1
-			messageID = originID + ":" + ent:sequence
+			sequence = ent:sequence.defaultsTo(0) + 1
+			messageID = originID + ":" + sequence
 		}
 		send_directive("new message")
 			with message = new_message
 		always {
+			ent:sequence := sequence;
 			ent:messages := ent:messages.defaultsTo({});
 			ent:messages{[messageID]} := new_message;
 		}
