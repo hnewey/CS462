@@ -69,7 +69,7 @@ ruleset chat_system {
 	rule user_messages {
 		select when chat user_messages
 		pre {
-			user_messages = event:attr("messages").klog("***RETURNED MESSAGES IS: ")
+			user_messages = {[event:attr("user_name"), event:attr("messages")]}
 		}
 		send_directive("user messages")
 			with user_messages = user_messages
