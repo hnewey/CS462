@@ -78,6 +78,10 @@ ruleset user {
 		}
 		send_directive("new message")
 			with message = new_message
+		always {
+			ent:messages := ent:messages.defaultsTo({});
+			ent:messages{[messageID]} := new_message;
+		}
 	}
 
 	rule get_messages {
