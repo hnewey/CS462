@@ -56,7 +56,7 @@ ruleset chat_system {
 		foreach getUsers() setting (user)
 		pre {
 			user = user.klog("***USER IN LOOP IS: ")
-			user_eci = get_eci(user).klog("***USER ECI IS: ")
+			user_eci = user{"eci"}.klog("***USER ECI IS: ")
 		}
 		if user_eci then {
 			event:send(
