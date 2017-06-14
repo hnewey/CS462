@@ -71,10 +71,10 @@ ruleset user {
 		select when user new_message
 		pre {
 			random_num = random:integer(1,2).klog("****RANDOM IS: ")
-			new_message = event:attr("message_text").klog("****NEW MESSAGE IS: ")
+			new_message = event:attr("message_text").defaultsTo("Test message")
 			originID = meta:picoId.klog("****Origin ID is: ")
-			sequence = ent:sequence.defaultsTo(0) + 1
-			messageID = originID + ":" + sequence
+			ent:sequence := ent:sequence.defaultsTo(0) + 1
+			messageID = originID + ":" + ent:sequence
 		}
 		send_directive("new message")
 			with message = new_message
