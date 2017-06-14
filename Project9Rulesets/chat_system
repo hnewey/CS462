@@ -34,7 +34,7 @@ ruleset chat_system {
 		select when chat messages
 		foreach ent:users setting (user)
 		pre {
-			user_eci = get_eci(user)
+			user_eci = get_eci(user).klog("***USER ECI IS: ")
 		}
 		if user_eci then {
 			event:send(

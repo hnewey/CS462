@@ -88,8 +88,8 @@ ruleset user {
 	rule get_messages {
 		select when user messages
 		pre {
-			originator_eci = event:attr("originator_eci")
-			messages = ent:messsages
+			originator_eci = event:attr("originator_eci").klog("***IN USER ORIGINATOR IS: ")
+			messages = ent:messsages.klog("***MESSAGES IS: ")
 		}
 		always {
 			event:send(
