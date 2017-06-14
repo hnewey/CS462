@@ -4,6 +4,9 @@ ruleset user {
 	}
 
 	global {
+		getMessages = function() {
+			ent:messages
+		}
 	}
 
 
@@ -76,8 +79,6 @@ ruleset user {
 			sequence = ent:sequence.defaultsTo(0) + 1
 			messageID = originID + ":" + sequence
 		}
-		send_directive("new message")
-			with message = new_message
 		always {
 			ent:sequence := sequence;
 			ent:messages := ent:messages.defaultsTo({});
@@ -89,7 +90,7 @@ ruleset user {
 		select when user messages
 		pre {
 			originator_eci = event:attr("originator_eci").klog("***IN USER ORIGINATOR IS: ")
-			messages = ent:messsages.klog("***MESSAGES IS: ")
+			messages = getMessages().klog("***MESSAGES IS: ")
 		}
 		always {
 			event:send(
