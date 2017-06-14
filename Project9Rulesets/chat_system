@@ -12,6 +12,9 @@ ruleset chat_system {
 		messages = function() {
 			ent:user_messages
 		}
+		getUsers = function() {
+			ent:users
+		}
 	}
 
 	rule user_exists {
@@ -30,10 +33,29 @@ ruleset chat_system {
 		}
 	}
 
+	rule user_needed {
+		select when chat user
+		pre {
+			user_name = event:attr("name")
+			message_text = event:attr("message")
+			exists = ent:users >< user_name
+		}
+		if not exists then
+			noop()
+		fired {
+			raise pico event "new_child_request"
+				attributes { "dname": user_name,
+										 "color": "#e0873e",
+										 "user_name": user_name,
+										 "message_text": message_text }
+		}
+	}
+
 	rule get_messages {
 		select when chat messages
-		foreach ent:users setting (user)
+		foreach getUsers() setting (user)
 		pre {
+			user = user.klog("***USER IN LOOP IS: ")
 			user_eci = get_eci(user).klog("***USER ECI IS: ")
 		}
 		if user_eci then {
@@ -53,24 +75,6 @@ ruleset chat_system {
 			with user_messages = user_messages
 		always {
 			ent:user_messages := user_messages
-		}
-	}
-
-	rule user_needed {
-		select when chat user
-		pre {
-			user_name = event:attr("name")
-			message_text = event:attr("message")
-			exists = ent:users >< user_name
-		}
-		if not exists then
-			noop()
-		fired {
-			raise pico event "new_child_request"
-				attributes { "dname": user_name,
-										 "color": "#e0873e",
-										 "user_name": user_name,
-										 "message_text": message_text }
 		}
 	}
 
