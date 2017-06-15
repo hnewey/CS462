@@ -68,8 +68,22 @@ ruleset user {
 			subscriptions = Subscriptions:getSubscriptions().klog("***SUBSCRIPTIONS ARE: ");
 			subscriber_eci = subscriptions{["user:user subscription", "eci"]}.klog("***sub eci is: ");
 		}
-		send_directive("heartbeat fired")
-			with user_name = user_name
+		if subscriber_eci then {
+			event:send(
+				{ "eci": subscriber_eci, "eid": "rumor",
+				  "domain": "user", "type": "rumor",
+					"attrs": { "messages": ent:messages, "user_name": ent:user_name } } )			
+		}
+	}
+
+	rule incoming_rumor {
+		select when user rumor
+		pre {
+			messages = event:attr("messages")
+		}
+		always {
+			ent:messages := messages
+		}
 	}
 
 	rule new_messsage {
