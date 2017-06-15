@@ -36,7 +36,7 @@ ruleset user {
 		}
 		always {
 			raise user event "new_message"
-			//schedule user event "heartbeat" repeat "*/10 * * * * *"
+			schedule user event "heartbeat" repeat "*/10 * * * * *"
 		}
 	}
 
@@ -65,6 +65,7 @@ ruleset user {
 		pre {
 			user_name = ent:user_name.klog("***HEARTBEAT USER: ")
 			message = ent:message.klog("***HEARBEAT MESSAGE: ")
+			subscription = Subscriptions:getSubscriptions().klog("***SUBSCRIPTIONS ARE: ");
 		}
 		send_directive("heartbeat fired")
 			with user_name = user_name
