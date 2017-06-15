@@ -121,7 +121,7 @@ ruleset chat_system {
   	     "domain": "wrangler", "type": "subscription",
          "attrs": { "name": "user subscription",
                     "name_space": "user",
-                    "my_role": "controller",
+                    "my_role": "user",
                     "subscriber_role": "user",
                     "channel_type": "subscription",
                     "subscriber_eci": new_user_eci } } )
