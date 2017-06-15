@@ -35,7 +35,7 @@ ruleset user {
 			
 		}
 		always {
-			raise user event "new_message"
+			raise user event "new_message";
 			schedule user event "heartbeat" repeat "*/10 * * * * *"
 		}
 	}
