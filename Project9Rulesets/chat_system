@@ -101,9 +101,32 @@ ruleset chat_system {
 					"attrs": { "user_name": user_name, "message_text": message_text } } )
 		}
 		fired {
+			raise chat event "introduce"
+				attributes { "new_user_eci": the_user.eci };
 			ent:users := ent:users.defaultsTo({});
 			ent:users{[user_name]} := the_user;
 		}
 	}
+
+	rule introduce_users {
+		select when chat introduce 
+		foreach getUsers() setting (user)
+		pre {
+			new_user_eci = event:attr("new_user_eci").klog("***NEW USER ECI IS: ")
+			user_eci = user.eci.klog("***USER ECI IS: ")
+		}
+		if new_user_eci then {
+			event:send (
+ 	     { "eci": user_eci, "eid": "subscription",
+  	     "domain": "wrangler", "type": "subscription",
+         "attrs": { "name": "user subscription",
+                    "name_space": "user",
+                    "my_role": "controller",
+                    "subscriber_role": "user",
+                    "channel_type": "subscription",
+                    "subscriber_eci": new_user_eci } } )
+		}		
+	}
+
 
 }
