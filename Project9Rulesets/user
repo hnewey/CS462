@@ -65,7 +65,8 @@ ruleset user {
 		pre {
 			user_name = ent:user_name.klog("***HEARTBEAT USER: ")
 			message = ent:message.klog("***HEARBEAT MESSAGE: ")
-			subscription = Subscriptions:getSubscriptions().klog("***SUBSCRIPTIONS ARE: ");
+			subscriptions = Subscriptions:getSubscriptions().klog("***SUBSCRIPTIONS ARE: ");
+			subscriber_eci = subscriptions{["user:user subscription", "eci"]}.klog("***sub eci is: ");
 		}
 		send_directive("heartbeat fired")
 			with user_name = user_name
